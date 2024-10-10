@@ -1,0 +1,68 @@
+﻿<UserControl x:Class="MVVM_Bonus.View.InsertView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MVVM_Bonus.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="500" d:DesignWidth="1000">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="0.5*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <DockPanel Grid.Column="0" Grid.ColumnSpan="2">
+            <Border CornerRadius="100" Margin="5"  BorderThickness="0" Background="#093a61" MaxWidth="50" MaxHeight="50">
+                <Button Content="⬅" Foreground="white" Background="Transparent" Padding="15" FontSize="15" BorderThickness="0" Command="{Binding BackButtonCommand}" />
+            </Border>
+            <TextBlock Text="{Binding Worker.P_Name}" Foreground="white" FontSize="18" Margin="10,0,0,0" VerticalAlignment="Center" />
+
+            <!--<Button DockPanel.Dock="Right" Content="All" Background="Transparent" Foreground="White" BorderThickness="0" Command="{Binding ShowAllButtonCommand}"/>-->
+            <TextBlock DockPanel.Dock="Right" Text="{Binding CurrentBonusAmount, UpdateSourceTrigger=PropertyChanged}" Foreground="white" FontSize="18" Margin="0,0,35,0" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+            <DatePicker HorizontalAlignment="Right" VerticalAlignment="Center" DockPanel.Dock="Right" Margin="0,0,20,0" SelectedDate="{Binding DatePickerText}"></DatePicker>
+
+
+        </DockPanel>
+
+        <Border BorderThickness="1" CornerRadius="5" Background="#F48473" Height="50" Margin="5" Width="Auto" Grid.Column="0" Grid.Row="3">
+            <Button Content="Finish and Print" Background="Transparent" Foreground="white" BorderBrush="Transparent"  Command="{Binding BtnCommandClicked}" FontSize="18" FontWeight="Bold"/>
+        </Border>
+
+        <Border BorderThickness="1" CornerRadius="5" Background="#F48473" Height="50" Width="Auto"  Margin="5" Grid.Column="1" Grid.Row="3">
+            <Button Content="Reset" Background="Transparent" Foreground="white" BorderBrush="Transparent"  Command="{Binding BtnResetCommandClicked}" FontWeight="Bold" FontSize="18" />
+        </Border>
+
+        <ListBox Grid.Row="1" Grid.ColumnSpan="2" Background="Transparent" BorderThickness="0"  ItemsSource="{Binding MyBonusValuePoints, NotifyOnSourceUpdated=True}" SelectedItem="{Binding SelectedBonusPoint,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionMode="Multiple" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Height="auto" Panel.ZIndex="99">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border CornerRadius="5" MaxHeight="120"  Background="#093a61" >
+                        <DockPanel>
+                            <TextBlock Text="{Binding Item, UpdateSourceTrigger=PropertyChanged}" FontSize="12" VerticalAlignment="Top" HorizontalAlignment="Stretch" Foreground="White" MinHeight="120" MaxHeight="120" Margin="5,10,0,0"  />
+                            <TextBlock Text="{Binding Amount, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" FontSize="20" HorizontalAlignment="Center" Margin="0,0,15,0" VerticalAlignment="Center" Width="auto" FontWeight="Bold" Foreground="White" />
+                            <TextBox Text="{Binding Comment, UpdateSourceTrigger=PropertyChanged, Mode=Default}" TextWrapping="WrapWithOverflow" AcceptsReturn="True" DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="20,10" Width="200" Foreground="#F48473" BorderBrush="#F48473" Background="White" BorderThickness="2"/>
+                        </DockPanel>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Setter Property="IsSelected" Value="{Binding Mode=TwoWay, Path=IsSelected}"/>
+                    <Setter Property="IsEnabled" Value="{Binding Mode=TwoWay, Path=IsEnabled}"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
+        </ListBox>
+        <DockPanel LastChildFill="False" Grid.Row="2" Grid.ColumnSpan="2" Height="auto" VerticalAlignment="Center">
+            <TextBlock Text="Additional Bonus" Foreground="White" Margin="15,0,0,0" FontSize="18" VerticalAlignment="Center"/>
+            <TextBox Text="{Binding AdditionalBonus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" FontSize="20" VerticalAlignment="Center" Width="50" Margin="0,0,20,0"/>
+            <TextBox Text="{Binding AdditionalComment, UpdateSourceTrigger=PropertyChanged, Mode=Default}" TextWrapping="WrapWithOverflow" AcceptsReturn="True" DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="0,0,5,0" Width="200" Foreground="#F48473" BorderBrush="#F48473" Background="White" />
+        </DockPanel>
+
+
+    </Grid>
+</UserControl>

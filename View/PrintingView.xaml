@@ -1,0 +1,92 @@
+﻿<UserControl x:Class="MVVM_Bonus.View.PrintingView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MVVM_Bonus.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="1080" d:DesignWidth="1000">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <ScrollViewer>
+            <Grid Name="PrintArea" Background="White" HorizontalAlignment="Left"  MaxHeight="27.5cm" MaxWidth="21cm" Margin="15">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.35*"/>
+                    <RowDefinition Height="5*"/>
+                    <RowDefinition Height="0.75*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="CLEARCHANNEL BELGIUM" FontSize="20" Padding="15,10,0,0"/>
+
+                <ListView Margin="10" AlternationCount="2"  Grid.Row="1" Grid.ColumnSpan="3" Background="Transparent" BorderThickness="0" ItemsSource="{Binding MyBonusDetails}" SelectedItem="{Binding SelectedBonusModel}" HorizontalContentAlignment="Stretch"  >
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="13cm"/>
+                                    <ColumnDefinition Width="4cm"/>
+                                    <ColumnDefinition Width="2cm"/>
+                                </Grid.ColumnDefinitions>
+                                <Border BorderBrush="Black" BorderThickness="1" Grid.Column="0">
+                                    <TextBlock Text="{Binding DetailPoint}"/>
+                                </Border>
+                                <Border BorderBrush="Black" BorderThickness="1" Grid.Column="1">
+                                    <TextBlock Text="{Binding Comment}" />
+                                </Border>
+                                <Border BorderBrush="Black" BorderThickness="1" Grid.Column="2">
+                                    <TextBlock Text="{Binding Amount}" DockPanel.Dock="Right" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <Grid Grid.Row="2" Grid.ColumnSpan="3" Margin="10,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="13cm"/>
+                        <ColumnDefinition Width="4cm"/>
+                        <ColumnDefinition Width="2cm"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <Label FontWeight="Bold" Content="Name: "/>
+                        <TextBlock HorizontalAlignment="Center" Text="{Binding WorkerName}" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="1">
+                        <Label FontWeight="Bold" Content="Period: "/>
+                        <TextBlock HorizontalAlignment="Center" Text="{Binding Period}" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="2">
+                        <Label FontWeight="Bold">TOTAL:</Label>
+                        <TextBlock HorizontalAlignment="Center" FontSize="18px" FontWeight="Bold" Text="{Binding Total}"></TextBlock>
+                    </StackPanel>
+                    <TextBlock Grid.Row="1" Text="Signature Worker" FontWeight="Bold" Margin="0,10,0,0"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Text="Signature Teamleader/Manager" FontWeight="Bold" Margin="0,10,0,0"/>
+                </Grid>
+
+                <!--<Grid.LayoutTransform>
+                    <ScaleTransform ScaleX="{Binding Path = Value, ElementName=_zoom}" ScaleY="{Binding Path = Value, ElementName=_zoom}"/>
+                </Grid.LayoutTransform>-->
+            </Grid>
+        </ScrollViewer>
+
+        <StackPanel VerticalAlignment="Bottom" Grid.Row="1">
+            <!--<Slider Name="_zoom" Minimum="0" Maximum="10" Value="0"/>-->
+
+            <Button Content="Print" Style="{StaticResource TransformedButtonBorder}"  Command="{Binding BtnPrintPreview}" CommandParameter="{Binding ElementName=PrintArea}"/>
+            <Button Content="Finish" Style="{StaticResource TransformedButtonBorder}" Command="{Binding BtnBackButton}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>
