@@ -29,7 +29,6 @@ namespace MVVM_Bonus.ViewModel
                 OnPropertyChanged(nameof(CurrentPageViewModel));
             }
         }
-
         public List<IPageViewModel> ListPageViewModel
         {
             get
@@ -60,7 +59,7 @@ namespace MVVM_Bonus.ViewModel
             Mediator.Subscribe("InsertPersonsBonusView", ShowInsertBonus);
             Mediator.Subscribe("GoToPrintingView", ShowPrinting);
 
-            Messenger.Default.Register<TeamLeaderModel>(this, OnSelectedTeamLeader);
+            Messenger.Default.Register<TeamLeaderModel>(this, "getTeamleader", teamLeader => OnSelectedTeamLeader(teamLeader));
         }
 
         private void OnSelectedTeamLeader(TeamLeaderModel obj)

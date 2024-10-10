@@ -118,13 +118,7 @@ namespace MVVM_Bonus.ViewModel
         public DateTime DatePickerText
         {
             get
-            {
-                if (_datePickerText.ToString() == "01/01/0001 00:00:00")
-                {
-                    _datePickerText = DateTime.Today;
-                }
-
-
+            {                                  
                 return _datePickerText;
             }
             set
@@ -195,8 +189,7 @@ namespace MVVM_Bonus.ViewModel
         public InsertViewModel()
         {
             Messenger.Default.Register<Person>(this, "InsertView", selectedPerson => _generateBonusPoints(selectedPerson));
-
-
+            DatePickerText = DateTime.Today;
         }
         #endregion
 

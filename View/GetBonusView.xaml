@@ -17,40 +17,34 @@
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
         <DockPanel Grid.Column="0" Grid.ColumnSpan="2">
-            <Border CornerRadius="100" Margin="5"  BorderThickness="0" Background="#093a61" MaxWidth="50" MaxHeight="50">
-                <Button Content="⬅" Foreground="white" Background="Transparent" Padding="15" FontSize="15" BorderThickness="0" Command="{Binding BackButtonCommand}" />
-            </Border>
+      
+            <Button Content="⬅" Style="{StaticResource TransformedButtonBorder}"  Command="{Binding BackButtonCommand}" />
 
-            <TextBlock Text="Name: " Foreground="white" FontSize="18" Margin="5" VerticalAlignment="Center"/>
+
+            <TextBlock Text="{Binding SelectedBonusModel.WorkerName}" Foreground="white" FontSize="18" Margin="5" VerticalAlignment="Center"/>
             <!--<Button DockPanel.Dock="Right" Content="All" Background="Transparent" Foreground="White" BorderThickness="0" Command="{Binding ShowAllButtonCommand}"/>-->
             <Border DockPanel.Dock="Right" CornerRadius="15" BorderThickness="2" Background="White" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5">
                 <TextBox Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}" Foreground="Salmon" Background="Transparent" FontSize="18" Margin="5"  Width="200" BorderThickness="0"/>
             </Border>
-            <TextBlock DockPanel.Dock="Right" Text="Search: " Foreground="white" FontSize="18" Margin="5" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+            <TextBlock DockPanel.Dock="Right" Text="🔍 " Foreground="white" FontSize="18" Margin="5" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Right"/>
 
         </DockPanel>
 
-        <Border BorderThickness="1" CornerRadius="5" Background="#F48473" Height="50" Margin="5" Width="Auto" Grid.Column="0" Grid.Row="2">
-            <Button Content="Detailed View" Background="Transparent" Foreground="white" BorderBrush="Transparent"  Command="{Binding BtnDetailViewCommand}" FontSize="18" FontWeight="Bold"/>
-        </Border>
+     
+        <Button Content="Preview" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" Style="{StaticResource TransformedButtonBorder}" Command="{Binding BtnPrintCommand}"  />
 
-        <Border BorderThickness="1" CornerRadius="5" Background="#F48473" Height="50" Width="Auto"  Margin="5" Grid.Column="1" Grid.Row="2">
-            <Button Content="Print" Background="Transparent" Foreground="white" BorderBrush="Transparent"  Command="{Binding BtnPrintCommand}" FontWeight="Bold" FontSize="18" />
-        </Border>
 
         <ListBox Background="Transparent" BorderThickness="0" HorizontalContentAlignment="Stretch" ItemsSource="{Binding FilteredListBonusModels}" SelectedItem="{Binding SelectedBonusModel, UpdateSourceTrigger=PropertyChanged}" IsTextSearchEnabled="True" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="1" Grid.ColumnSpan="2" Panel.ZIndex="99">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Border  BorderThickness="0,0,0,1" BorderBrush="White">
-                        <DockPanel>
-                            <TextBlock Text="{Binding WorkerName}" FontSize="18" VerticalAlignment="Center" Foreground="White"/>
+                    <Grid>
+                        <Border BorderThickness="0,0,0,1" BorderBrush="White">
                             <DockPanel>
-                                <TextBlock Text="{Binding Period}" DockPanel.Dock="Top" HorizontalAlignment="Right"  Foreground="White"/>
-                                <TextBlock Text="{Binding Total}" FontSize="15" HorizontalAlignment="Right" FontWeight="Bold" Foreground="White"/>
+                                <TextBlock Text="{Binding Period}" DockPanel.Dock="Top" HorizontalAlignment="Center" FontWeight="Bold" FontSize="18" Foreground="White"/>
+                                <TextBlock Text="{Binding Total}" FontSize="15" HorizontalAlignment="Center" Foreground="White"/>
                             </DockPanel>
-                        </DockPanel>
-                    </Border>
-
+                        </Border>
+                    </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
 

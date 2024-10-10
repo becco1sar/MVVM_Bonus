@@ -40,8 +40,10 @@
                                 <Setter TargetName="BorderButtonControl" Property="Opacity" Value="0.5"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
+
                     </ControlTemplate>
                 </Setter.Value>
+
             </Setter>
         </Style>
 
