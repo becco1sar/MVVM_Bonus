@@ -46,7 +46,7 @@ namespace MVVM_Bonus.ViewModel
         {
             ListPageViewModel.Add(new LoginViewModel());
             ListPageViewModel.Add(new GeneralViewModel());
-            ListPageViewModel.Add(new GetBonusViewModel());
+            ListPageViewModel.Add(new BonusViewModel());
             ListPageViewModel.Add(new InsertViewModel());
             ListPageViewModel.Add(new InsertViewVeloViewModel());
             ListPageViewModel.Add(new PrintingViewModel());

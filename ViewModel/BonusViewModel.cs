@@ -12,7 +12,7 @@ using System.Windows.Input;
 
 namespace MVVM_Bonus.ViewModel
 {
-    public class GetBonusViewModel : ObservableObject, IPageViewModel
+    public class BonusViewModel : ObservableObject, IPageViewModel
     {
         #region Fields
         string _search;
@@ -20,8 +20,10 @@ namespace MVVM_Bonus.ViewModel
         Person _currentPerson;
         BonusModel _BonusPoint;
         BonusModel _selectedBonusModel;
+        
         ObservableCollection<BonusModel> _listBonusModels;
         ObservableCollection<BonusModel> _filteredListBonusModels;
+
         ICommand _backButtonCommand;
         ICommand _btnDetailViewCommand;
         ICommand _btnPrintCommand;
@@ -119,7 +121,7 @@ namespace MVVM_Bonus.ViewModel
                 {
                     _btnDetailViewCommand = new RelayCommand(e => 
                     { 
-                        CommonViewModel.PreviousViewModel = new GetBonusViewModel(); 
+                        CommonViewModel.PreviousViewModel = new BonusViewModel(); 
                         Mediator.Notify("GoToPrintingView", ""); 
                         Messenger.Default.Send(CurrentPerson, "selectedPerson"); 
                         Messenger.Default.Send(SelectedBonusModel, "PrintView"); 
@@ -140,7 +142,7 @@ namespace MVVM_Bonus.ViewModel
                 {
                     _btnPrintCommand = new RelayCommand(e =>
                     {
-                        CommonViewModel.PreviousViewModel = new GetBonusViewModel();
+                        CommonViewModel.PreviousViewModel = new BonusViewModel();
                         Mediator.Notify("GoToPrintingView", "");
                         Messenger.Default.Send(CurrentPerson, "selectedPerson");
                         Messenger.Default.Send(SelectedBonusModel, "PrintView");
@@ -164,7 +166,7 @@ namespace MVVM_Bonus.ViewModel
         }
         #endregion
         #region Constructors
-        public GetBonusViewModel()
+        public BonusViewModel()
         {
             Messenger.Default.Register<Person>(this, "GetView", callback => _generateListOfBonus(callback));
         }

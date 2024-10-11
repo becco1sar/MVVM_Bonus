@@ -13,7 +13,7 @@
         <DataTemplate DataType="{x:Type vm:GeneralViewModel}">
             <v:GeneralView/>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type vm:GetBonusViewModel}">
+        <DataTemplate DataType="{x:Type vm:BonusViewModel}">
             <v:GetBonusView/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type vm:InsertViewModel}">
