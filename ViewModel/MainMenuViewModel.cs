@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace MVVM_Bonus.ViewModel
 {
-    public class GeneralViewModel : ObservableObject, IPageViewModel
+    public class MainMenuViewModel : ObservableObject, IPageViewModel
     {
         #region Fields
         string _search;
@@ -116,7 +116,7 @@ namespace MVVM_Bonus.ViewModel
         }
         #endregion
         #region Constructors
-        public GeneralViewModel()
+        public MainMenuViewModel()
         {
             Messenger.Default.Register<TeamLeaderModel>(this, "getTeamleader", action => _generatePersons(action));
             

@@ -10,7 +10,7 @@
         <DataTemplate DataType="{x:Type vm:LoginViewModel}">
             <v:LoginView/>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type vm:GeneralViewModel}">
+        <DataTemplate DataType="{x:Type vm:MainMenuViewModel}">
             <v:GeneralView/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type vm:BonusViewModel}">
