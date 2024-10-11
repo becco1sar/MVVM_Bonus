@@ -25,7 +25,7 @@ namespace MVVM_Bonus.ViewModel
         private decimal _additionalBonus;
         private string _additionalComment;
         private decimal _currentBonusAmount;
-        int total;
+        int _total;
 
         ICommand _btnCommandClicked;
         ICommand _btnResetCommandClicked;
@@ -41,7 +41,7 @@ namespace MVVM_Bonus.ViewModel
             }
             set
             {
-                _addRemoveAmount();
+                AddRemoveAmount();
                 OnPropertyChanged(nameof(SelectedBonusPoint));
             }
         }
@@ -136,7 +136,7 @@ namespace MVVM_Bonus.ViewModel
             set
             {
                 _additionalBonus = value;
-                _addRemoveAmount();
+                AddRemoveAmount();
                 OnPropertyChanged(nameof(AdditionalBonus));
 
             }
@@ -162,7 +162,7 @@ namespace MVVM_Bonus.ViewModel
                 if (_backButtonCommand == null)
                 { 
                     _backButtonCommand = new RelayCommand(
-                        param => _backToGeneral());
+                        param => BackToGeneral());
                 }
 
                 return _backButtonCommand;
@@ -175,7 +175,7 @@ namespace MVVM_Bonus.ViewModel
                 if (_btnResetCommandClicked == null)
                 {
                     _btnResetCommandClicked = new RelayCommand(
-                        param => _resetView(),
+                        param => ResetView(),
                         param => (MyBonusValuePoints.Where(x => x.IsSelected).Count() > 0) || (MyBonusValuePoints.Where(x => x.Comment != "").Count() > 0) || AdditionalBonus != 0 || CurrentBonusAmount != 0);
                 }
                 return _btnResetCommandClicked;
@@ -188,20 +188,20 @@ namespace MVVM_Bonus.ViewModel
         #region Constructors
         public InsertViewModel()
         {
-            Messenger.Default.Register<Person>(this, "InsertView", selectedPerson => _generateBonusPoints(selectedPerson));
+            Messenger.Default.Register<Person>(this, "InsertView", selectedPerson => GenerateBonusPoints(selectedPerson));
             DatePickerText = DateTime.Today;
         }
         #endregion
 
         #region Methods
-        private void _generateBonusPoints(Person thisPerson)
+        private void GenerateBonusPoints(Person thisPerson)
         {
             Worker = thisPerson;
 
             _oleDbDReader = DataBaseHandler.GetCommand($"Select * from Bv_General WHERE id = {Worker.P_BVID}");
 
             var files = Directory.GetFiles($@"O:\Sécurisation\Département Affichage\Controle Adshel 2m²\PRIME DE QUALITE\BETA 2.0{Worker.P_PathToContentCells}", "*.txt", SearchOption.TopDirectoryOnly);
-            total = files.Count();
+            _total = files.Count();
             while (_oleDbDReader.Read())
             {
                 bool enabled = true;
@@ -217,7 +217,7 @@ namespace MVVM_Bonus.ViewModel
 
             CurrentBonusAmount = 0.00M;
         }
-        private void _enableSecondBonus(bool enable)
+        private void EnableSecondBonus(bool enable)
         {
             for (int i = 3; i < MyBonusValuePoints.Count(); i++)
             {
@@ -225,16 +225,16 @@ namespace MVVM_Bonus.ViewModel
                 MyBonusValuePoints[i].IsSelected = false;
             }
         }
-        private void _addRemoveAmount()
+        private void AddRemoveAmount()
         {
             if (MyBonusValuePoints[0].IsSelected && MyBonusValuePoints[1].IsSelected && MyBonusValuePoints[2].IsSelected && !IsFirstBonusSelected)
             {
-                _enableSecondBonus(true);
+                EnableSecondBonus(true);
                 IsFirstBonusSelected = true;
             }
             else if ((!MyBonusValuePoints[0].IsSelected || !MyBonusValuePoints[1].IsSelected || !MyBonusValuePoints[2].IsSelected) && IsFirstBonusSelected)
             {
-                _enableSecondBonus(false);
+                EnableSecondBonus(false);
                 IsFirstBonusSelected = false;
 
             }
@@ -245,7 +245,7 @@ namespace MVVM_Bonus.ViewModel
             foreach (var item in MyBonusValuePoints.Where(x => x.IsSelected))
                 CurrentBonusAmount += item.Amount;
         }
-        private void _backToGeneral()
+        private void BackToGeneral()
         {
             MyBonusValuePoints.Clear();
             Mediator.Notify("GoToGeneral", "");
@@ -257,7 +257,7 @@ namespace MVVM_Bonus.ViewModel
                 return true;
             return false;
         }
-        private void _resetView()
+        private void ResetView()
         {
             foreach (var bonus in MyBonusValuePoints)
             {
@@ -355,9 +355,9 @@ namespace MVVM_Bonus.ViewModel
 
             helloWorld = helloWorld + $"Total: {CurrentBonusAmount}";
             //MessageBox.Show(helloWorld);
-            val[total - 1] = AdditionalBonus.ToString();
-            values[total - 1] = AdditionalBonus;
-            comments[total - 1] = AdditionalComment;
+            val[_total - 1] = AdditionalBonus.ToString();
+            values[_total - 1] = AdditionalBonus;
+            comments[_total - 1] = AdditionalComment;
             DataBaseHandler.InsertCommand($"INSERT INTO Bonus_General " +
                 $"(Worker_id,Period,Total,AmountA,AmountB,AmountC,AmountD,AmountE,AmountF,AmountG,AmountH,AmountI,AmountJ,CommentA,CommentB,CommentC,CommentD,CommentE,CommentF,CommentG,CommentH,CommentI,CommentJ) " +
                 $"VALUES (" +

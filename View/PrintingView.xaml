@@ -62,7 +62,7 @@
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Column="0">
                         <Label FontWeight="Bold" Content="Name: "/>
-                        <TextBlock HorizontalAlignment="Center" Text="{Binding WorkerName}" />
+                        <TextBlock HorizontalAlignment="left" Text="{Binding WorkerName}" />
                     </StackPanel>
                     <StackPanel Grid.Column="1">
                         <Label FontWeight="Bold" Content="Period: "/>

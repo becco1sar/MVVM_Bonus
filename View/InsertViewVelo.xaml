@@ -30,13 +30,11 @@
 
         </DockPanel>
 
-        <Border BorderThickness="1" CornerRadius="5" Background="#F48473" Height="50" Margin="5" Width="Auto" Grid.Column="0" Grid.Row="3">
-            <Button Content="Finish and Print" Background="Transparent" Foreground="white" BorderBrush="Transparent"  Command="{Binding BtnCommandClicked}" FontSize="18" FontWeight="Bold"/>
-        </Border>
 
-        <Border BorderThickness="1" CornerRadius="5" Background="#F48473" Height="50" Width="Auto"  Margin="5" Grid.Column="1" Grid.Row="3">
-            <Button Content="Reset" Background="Transparent" Foreground="white" BorderBrush="Transparent"  Command="{Binding BtnResetCommandClicked}" FontWeight="Bold" FontSize="18" />
-        </Border>
+        <Button Content="Finish and Print" Grid.Row="3" Grid.Column="1" Style="{StaticResource TransformedButtonBorder}"  Command="{Binding BtnCommandClicked}"/>
+
+        <Button Content="Reset" Grid.Row="3" Style="{StaticResource TransformedButtonBorder}" Command="{Binding BtnResetCommandClicked}" />
+       
 
         <ListBox Grid.Row="1" Grid.ColumnSpan="2" Background="Transparent" BorderThickness="0"  ItemsSource="{Binding MyBonusValuePoints, NotifyOnSourceUpdated=True}" SelectedItem="{Binding SelectedBonusPoint,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionMode="Multiple" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Height="auto" Panel.ZIndex="99">
             <ListBox.ItemTemplate>

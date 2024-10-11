@@ -38,22 +38,28 @@
        
                 <RowDefinition Height="3*"/>
             </Grid.RowDefinitions>
-            <DockPanel Grid.Row="0" LastChildFill="False" Margin="0,0,0,5" HorizontalAlignment="Right">
+            <DockPanel Grid.Row="0" LastChildFill="False" Margin="0,0,10,5" HorizontalAlignment="Right">
                 <TextBlock Text="🔍" Foreground="white" DockPanel.Dock="Left" FontWeight="Bold" VerticalAlignment="Center" FontSize="18" Margin="10,0,10,0"/>
                 <Border Background="White" CornerRadius="15" Width="300" Height="35" >
-                    <TextBox Background="Transparent" Foreground="#F48473" Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" VerticalContentAlignment="Center" FontSize="18"/>
+                    <TextBox Background="Transparent"  Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" VerticalContentAlignment="Center" FontSize="18"/>
                 </Border>
             </DockPanel>
-            <ListBox Grid.Row="2" ItemsSource="{Binding Path=FilteredListPerson}" HorizontalContentAlignment="Stretch" SelectedItem="{Binding SelectedWorker, UpdateSourceTrigger=PropertyChanged}" Background="Transparent" BorderThickness="0" Height="auto" Panel.ZIndex="99" >
+            <ListBox Name="MyListBox" Grid.Row="2" ItemsSource="{Binding Path=FilteredListPerson}" HorizontalContentAlignment="Stretch" SelectedItem="{Binding SelectedWorker, UpdateSourceTrigger=PropertyChanged}" Background="Transparent" BorderThickness="0" Height="auto" Width="auto" Panel.ZIndex="99" >
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Border CornerRadius="5" Margin="5" Background="#4CFFFFFF">
-                            <TextBlock  Text="{Binding P_Name}" Foreground="White" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        <Border CornerRadius="5" Background="#4CFFFFFF" Padding="20">
+                            <TextBlock Text="{Binding P_Name}" Foreground="White" VerticalAlignment="Stretch" HorizontalAlignment="Center" />
                         </Border>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
-            </ListBox>
 
+                <!-- Set the panel template to arrange items horizontally -->
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal" ItemWidth="300" ItemHeight="100" MaxWidth="900"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
         </Grid>
     </Grid>
 </UserControl>

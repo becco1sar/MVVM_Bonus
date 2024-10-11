@@ -17,9 +17,8 @@
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
         <DockPanel Grid.Column="0" Grid.ColumnSpan="2">
-      
-            <Button Content="⬅" Style="{StaticResource TransformedButtonBorder}"  Command="{Binding BackButtonCommand}" />
 
+            <Button Content="⬅" Style="{StaticResource TransformedButtonBorder}"  Command="{Binding BackButtonCommand}" />
 
             <TextBlock Text="{Binding SelectedBonusModel.WorkerName}" Foreground="white" FontSize="18" Margin="5" VerticalAlignment="Center"/>
             <!--<Button DockPanel.Dock="Right" Content="All" Background="Transparent" Foreground="White" BorderThickness="0" Command="{Binding ShowAllButtonCommand}"/>-->
@@ -30,25 +29,26 @@
 
         </DockPanel>
 
-     
         <Button Content="Preview" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" Style="{StaticResource TransformedButtonBorder}" Command="{Binding BtnPrintCommand}"  />
-
 
         <ListBox Background="Transparent" BorderThickness="0" HorizontalContentAlignment="Stretch" ItemsSource="{Binding FilteredListBonusModels}" SelectedItem="{Binding SelectedBonusModel, UpdateSourceTrigger=PropertyChanged}" IsTextSearchEnabled="True" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="1" Grid.ColumnSpan="2" Panel.ZIndex="99">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Grid>
-                        <Border BorderThickness="0,0,0,1" BorderBrush="White">
-                            <DockPanel>
-                                <TextBlock Text="{Binding Period}" DockPanel.Dock="Top" HorizontalAlignment="Center" FontWeight="Bold" FontSize="18" Foreground="White"/>
-                                <TextBlock Text="{Binding Total}" FontSize="15" HorizontalAlignment="Center" Foreground="White"/>
-                            </DockPanel>
-                        </Border>
-                    </Grid>
+            
+                    <Border CornerRadius="5">
+                        <DockPanel>
+                            <TextBlock Text="{Binding Period}" DockPanel.Dock="Top" HorizontalAlignment="Center" FontWeight="Bold" FontSize="18" Foreground="White"/>
+                            <TextBlock Text="{Binding Total}" FontSize="15" HorizontalAlignment="Center" Foreground="White"/>
+                        </DockPanel>
+                    </Border>
+               
                 </DataTemplate>
             </ListBox.ItemTemplate>
-
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel ItemWidth="100" Width="1000"/>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
         </ListBox>
-
     </Grid>
 </UserControl>
