@@ -13,52 +13,36 @@ namespace MVVM_Bonus.ViewModel
 {
     public class LoginViewModel : ObservableObject, IPageViewModel
     {
-        ICommand _loginCommand;
-        string _loginName;
+
+        string _teamLeaderUserName;
         TeamLeaderModel _selectedTeamLeader;
-        public static string User;
 
         public ICommand LoginCommand
         {
-            get
+            get => new RelayCommand(x =>
             {
-                if(_loginCommand == null)
+                if (IsTeamLeaderInDatabase(TeamLeaderUserName))
                 {
-                    _loginCommand = new RelayCommand(x =>
-                    {
-                        if (IsTeamLeaderInDatabase(LoginName))
-                        {
-                            //SelectedTeamLeader = teamLeaderModels.Where(x => x.Tl_Name == LoginName).First();
-                            Mediator.Notify("GoToGeneral", "");
-                            Messenger.Default.Send(SelectedTeamLeader, "getTeamleader");
-
-                        }
-                        else
-                        {
-                            MessageBox.Show("Teamleader not found try again");
-                        }
-
-                    });
-                }                            
-                return _loginCommand;
-            }
+                    //SelectedTeamLeader = teamLeaderModels.Where(x => x.Tl_Name == LoginName).First();
+                    Mediator.Notify(Constants.MAIN_MENU_VIEW, "");
+                    Messenger.Default.Send(SelectedTeamLeader, Constants.MESSENGER_TEAMLEADER_IDENTIFICATION);
+                }
+                else
+                {
+                    MessageBox.Show("Teamleader not found try again");
+                }
+            });
         }
-
-        private void ShowName(string loginName)
-        {
-           MessageBox.Show(loginName);
-        }
-
-        public string LoginName
+        public string TeamLeaderUserName
         {
             get
             {
-                return _loginName;
+                return _teamLeaderUserName;
             }
             set
             {
-                _loginName = value;
-                OnPropertyChanged(LoginName);
+                _teamLeaderUserName = value;
+                OnPropertyChanged(TeamLeaderUserName);
             }
         }
 
@@ -78,20 +62,17 @@ namespace MVVM_Bonus.ViewModel
         {
             try
             {
-                var reader = DataBaseHandler.GetCommand($"SELECT * FROM Teamleaders WHERE username = '{name}'");
+                var reader = DataBaseHandler.GetCommand($"{Constants.TEAMLEADER_SQL_QUERY} = {name}'");
                 if (reader.HasRows)
                 {
                     while (reader.Read())
                     {
                         SelectedTeamLeader = new TeamLeaderModel()
                         {
-                            Tl_Id = Convert.ToInt32(reader.GetValue(0)),
-                            Tl_Name = reader.GetValue(1).ToString()
-
+                            Id = reader.GetOrdinal(Constants.TEAMLEADER_SQL_ID_COLUMN).ToString(),
+                            Name= reader.GetOrdinal(Constants.TEAMLEADER_SQL_NAME_COLUMN).ToString()
                         };
-                    }
-                    User = LoginName;
-
+                    }         
                     return true;
                 }
             }
