@@ -17,11 +17,6 @@ namespace MVVM_Bonus.ViewModel
         string _loginName;
         TeamLeaderModel _selectedTeamLeader;
         public static string User;
-        ObservableCollection<TeamLeaderModel> teamLeaderModels;
-
-        public LoginViewModel()
-        {
-        }
 
         public ICommand LoginCommand
         {
@@ -44,10 +39,7 @@ namespace MVVM_Bonus.ViewModel
                         }
 
                     });
-                }
-                    
-           
-
+                }                            
                 return _loginCommand;
             }
         }
@@ -117,20 +109,6 @@ namespace MVVM_Bonus.ViewModel
             }
  
             return false;
-        }
-        public ObservableCollection<TeamLeaderModel> TeamLeaderModels
-        {
-            get
-            {
-                if (teamLeaderModels == null)
-                    teamLeaderModels = new ObservableCollection<TeamLeaderModel>();
-                return teamLeaderModels;
-            }
-            set
-            {
-                teamLeaderModels = value;
-                OnPropertyChanged(nameof(TeamLeaderModels));
-            }
         }
     }
 }
