@@ -119,7 +119,7 @@ namespace MVVM_Bonus.ViewModel
         #region Constructors
         public MainMenuViewModel()
         {
-            Messenger.Default.Register<TeamLeaderModel>(this, "getTeamleader", action => _generatePersons(action));
+            Messenger.Default.Register<TeamLeaderModel>(this, "getTeamleader", action => GeneratePersons(action));
             
         }
         #endregion
@@ -138,8 +138,9 @@ namespace MVVM_Bonus.ViewModel
         {
             FilteredListPerson = ListPersons;
         }
-        private void _generatePersons(TeamLeaderModel tl)
+        private void GeneratePersons(TeamLeaderModel tl)
         {
+            //TODO Try except if null it exexucutes
             var reader = DataBaseHandler.GetCommand($"SELECT * FROM Workers WHERE Teamleader_id = {tl.Tl_Id} AND Active = 'Yes'");
             if (reader.HasRows)
             {
@@ -155,10 +156,10 @@ namespace MVVM_Bonus.ViewModel
                         P_TeamLeaderID = Convert.ToInt32(reader.GetValue(5)),
                         P_BVID = Convert.ToInt32(reader.GetValue(7))});
                 }
-                _pathToContents();
+                GetContentPoints();
             }
         }
-        private void _pathToContents()
+        private void GetContentPoints()
         {
             foreach(var person in ListPersons)
             {

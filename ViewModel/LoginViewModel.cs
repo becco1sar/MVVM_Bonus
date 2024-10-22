@@ -31,7 +31,7 @@ namespace MVVM_Bonus.ViewModel
                 {
                     _loginCommand = new RelayCommand(x =>
                     {
-                        if (_teamLeaderFound(LoginName))
+                        if (IsTeamLeaderInDatabase(LoginName))
                         {
                             //SelectedTeamLeader = teamLeaderModels.Where(x => x.Tl_Name == LoginName).First();
                             Mediator.Notify("GoToGeneral", "");
@@ -82,25 +82,40 @@ namespace MVVM_Bonus.ViewModel
                 OnPropertyChanged(nameof(SelectedTeamLeader));
             }
         }
-        private bool _teamLeaderFound(string name)
+        private bool IsTeamLeaderInDatabase(string name)
         {
-            var reader = DataBaseHandler.GetCommand($"SELECT * FROM Teamleaders WHERE username = '{name}'");
-            if(reader != null)
+            try
             {
-                while (reader.Read())
+                var reader = DataBaseHandler.GetCommand($"SELECT * FROM Teamleaders WHERE username = '{name}'");
+                if (reader.HasRows)
                 {
-                    SelectedTeamLeader = new TeamLeaderModel()
+                    while (reader.Read())
                     {
-                        Tl_Id = Convert.ToInt32(reader.GetValue(0)),
-                        Tl_Name = reader.GetValue(1).ToString()
-                    
-                    };
+                        SelectedTeamLeader = new TeamLeaderModel()
+                        {
+                            Tl_Id = Convert.ToInt32(reader.GetValue(0)),
+                            Tl_Name = reader.GetValue(1).ToString()
+
+                        };
+                    }
+                    User = LoginName;
+
+                    return true;
                 }
-                User = LoginName;
-
-                return true;
             }
-
+            catch (ArgumentNullException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            catch (OleDbException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+ 
             return false;
         }
         public ObservableCollection<TeamLeaderModel> TeamLeaderModels

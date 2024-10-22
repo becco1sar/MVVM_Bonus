@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using MVVM_Bonus.Services;
+using System;
 using System.Data.OleDb;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace MVVM_Bonus
@@ -15,39 +12,16 @@ namespace MVVM_Bonus
         private static OleDbConnection _cn;
         static OleDbDataAdapter _adapter;
         static OleDbDataReader _reader;
-        static string currentDir = Directory.GetCurrentDirectory().Remove(2);
-        static string _connectionString = @$"provider = Microsoft.ACE.OLEDB.12.0; Data Source = O:\Sécurisation\Département Affichage\Controle Adshel 2m²\PRIME DE QUALITE\BETA 2.0\WorkerBonus.accdb";
-
-
+        
+        public static void CreateConnection()
+        {
+            _cn = new OleDbConnection(Constants.SQL_CONNECTION_STRING);
+            _cn.Open();
+        }
         public static OleDbDataReader GetCommand(string query)
         {
-            if(_cn == null || _cn.State != System.Data.ConnectionState.Open)
-            {
-                try
-                {
-                    _cn = new OleDbConnection(_connectionString);
-                    _cn.Open();
-
-                }
-                catch(Exception e)
-                {
-                    MessageBox.Show(e.ToString());
-                    
-                }               
-            }
-            try
-            {
-                _cmd = new OleDbCommand(query, _cn);
-                _reader = _cmd.ExecuteReader();
-            }
-            catch(Exception e)
-            {
-                MessageBox.Show(e.ToString());
-
-            }
-
-
-
+            _cmd = new OleDbCommand(query, _cn);
+            _reader = _cmd.ExecuteReader();
             return _reader;
 
         }
@@ -58,7 +32,7 @@ namespace MVVM_Bonus
             {
                 try
                 {
-                    _cn = new OleDbConnection(_connectionString);
+                    _cn = new OleDbConnection(Constants.SQL_CONNECTION_STRING);
                     _cn.Open();
                 }
                 catch (Exception e)

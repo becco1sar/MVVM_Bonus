@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MVVM_Bonus
+namespace MVVM_Bonus.Services
 {
     public class Mediator
     {
