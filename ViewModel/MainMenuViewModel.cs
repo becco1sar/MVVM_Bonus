@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System;
 using System.Linq;
+using MVVM_Bonus.Services;
 
 namespace MVVM_Bonus.ViewModel
 {

@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Xps.Packaging;
 using System.Windows.Xps;
+using MVVM_Bonus.Services;
 
 namespace MVVM_Bonus.ViewModel
 {

@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
+using MVVM_Bonus.Services;
 using MVVM_Bonus.ViewModel;
 using System;
 using System.Collections.ObjectModel;

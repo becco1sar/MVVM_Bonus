@@ -5,6 +5,7 @@ using System.Linq;
 using GalaSoft.MvvmLight.Messaging;
 using System.Text;
 using System.Threading.Tasks;
+using MVVM_Bonus.Services;
 
 namespace MVVM_Bonus.ViewModel
 {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace MVVM_Bonus
+namespace MVVM_Bonus.Services
 {
     public class ObservableObject : INotifyPropertyChanged
     {
@@ -8,7 +8,7 @@ namespace MVVM_Bonus
 
         public void OnPropertyChanged(string propName)
         {
-           PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
         }
     }
 }

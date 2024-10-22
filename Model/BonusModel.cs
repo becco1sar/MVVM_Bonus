@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using MVVM_Bonus.Services;
 
 namespace MVVM_Bonus.Model
 {
