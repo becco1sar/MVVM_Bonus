@@ -10,5 +10,9 @@ namespace MVVM_Bonus.Services
     {
         public static string SQL_CONNECTION_STRING = @$"provider = Microsoft.ACE.OLEDB.12.0; Data Source = O:\Sécurisation\Département Affichage\Controle Adshel 2m²\PRIME DE QUALITE\BETA 2.0\WorkerBonus.accdb";
         public static string MAIN_MENU_VIEW = "MainMenuView";
+        public static string MESSENGER_TEAMLEADER_IDENTIFICATION = "SendTeamLeader";
+        public static string TEAMLEADER_SQL_QUERY = "SELECT * FROM Teamleaders WHERE username";
+        public static string SQL_NAME_COLUMN_NAME = "Name";
+        public static string SQL_ID_COLUMN_NAME = "ID";
     }
 }

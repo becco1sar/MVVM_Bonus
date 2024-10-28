@@ -55,18 +55,13 @@ namespace MVVM_Bonus.ViewModel
             CurrentPageViewModel = ListPageViewModel[0];
 
             Mediator.Subscribe("LoginView", LogOut);
-            Mediator.Subscribe("GoToGeneral", ShowGeneral);
+            Mediator.Subscribe(Constants.MAIN_MENU_VIEW, ShowGeneral);
             Mediator.Subscribe("GetPersonsBonusView", ShowBonus);
             Mediator.Subscribe("InsertPersonsBonusView", ShowInsertBonus);
             Mediator.Subscribe("GoToPrintingView", ShowPrinting);
 
-            Messenger.Default.Register<TeamLeaderModel>(this, "getTeamleader", teamLeader => OnSelectedTeamLeader(teamLeader));
         }
 
-        private void OnSelectedTeamLeader(TeamLeaderModel obj)
-        {
-            teamLeaderName = obj.Tl_Name;
-        }
         #endregion
         #region Methods
         private void ShowPrinting(object obj)

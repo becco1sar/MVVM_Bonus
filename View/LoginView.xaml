@@ -6,13 +6,14 @@
              xmlns:local="clr-namespace:MVVM_Bonus"
              mc:Ignorable="d" Height="139" Width="304" >
     <StackPanel Margin="5">
-        <TextBlock Foreground="white" Text="Login:"  Margin="5"/>
-        <Border Margin="5" Background="White" CornerRadius="20" >
-            <TextBox Foreground="black" BorderThickness="0" Height="40" VerticalContentAlignment="Center" Background="Transparent" Text="{Binding LoginName, UpdateSourceTrigger=PropertyChanged}"   />
-        </Border>
-        
+        <DockPanel>
+            <Label Foreground="white" Content="👤:"  Margin="5"/>
+
+            <TextBox  Margin="5"  Text="{Binding TeamLeaderUserName, UpdateSourceTrigger=PropertyChanged}"/>
+        </DockPanel>
+       
+      
         <Button Content="Login" Command="{Binding LoginCommand}" Style="{StaticResource TransformedButtonBorder}"/>
-        
     </StackPanel>
 </UserControl>
  

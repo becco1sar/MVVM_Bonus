@@ -172,7 +172,7 @@ namespace MVVM_Bonus.ViewModel
         private void _backToGeneral()
         {
             ListBonusModels.Clear();    
-            Mediator.Notify("GoToGeneral", ""); 
+            Mediator.Notify(Constants.MAIN_MENU_VIEW, ""); 
         }
         private void _filterByDate(string dt)
         {

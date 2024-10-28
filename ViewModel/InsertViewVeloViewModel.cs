@@ -275,8 +275,7 @@ namespace MVVM_Bonus.ViewModel
             {
                 bool enabled = true;
                 for (int i = 0; i < files.Count() - 4; i++)
-                {
-      
+                {      
                     var content = File.ReadAllText(files[i]);
                     MyBonusValuePoints.Add(new BonusValuesModel { Item = content, Amount = Convert.ToDecimal(_oleDbDReader.GetValue(i + 1)), IsSelected = false, IsEnabled = enabled, Comment = string.Empty });
                 }

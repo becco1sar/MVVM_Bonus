@@ -11,7 +11,6 @@ namespace MVVM_Bonus
         static OleDbCommand _cmd;
         private static OleDbConnection _cn;
         static OleDbDataAdapter _adapter;
-        static OleDbDataReader _reader;
         
         public static void CreateConnection()
         {
@@ -20,10 +19,9 @@ namespace MVVM_Bonus
         }
         public static OleDbDataReader GetCommand(string query)
         {
-            _cmd = new OleDbCommand(query, _cn);
-            _reader = _cmd.ExecuteReader();
+            _cmd = new OleDbCommand(query, _cn);          
+            OleDbDataReader _reader = _cmd.ExecuteReader();
             return _reader;
-
         }
 
         public static void InsertCommand(string query)
@@ -39,7 +37,6 @@ namespace MVVM_Bonus
                 {
                     MessageBox.Show(e.ToString());
                 }
-
             }
             _adapter = new OleDbDataAdapter();
             _cmd = new OleDbCommand(query, _cn);

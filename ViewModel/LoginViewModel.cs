@@ -1,11 +1,9 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using MVVM_Bonus.Services;
-using MVVM_Bonus.ViewModel;
 using System;
-using System.Collections.ObjectModel;
 using System.Data.OleDb;
-using System.Linq;
 using System.Windows;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 
 
@@ -45,7 +43,6 @@ namespace MVVM_Bonus.ViewModel
                 OnPropertyChanged(TeamLeaderUserName);
             }
         }
-
         public TeamLeaderModel SelectedTeamLeader
         {
             get
@@ -62,17 +59,21 @@ namespace MVVM_Bonus.ViewModel
         {
             try
             {
-                var reader = DataBaseHandler.GetCommand($"{Constants.TEAMLEADER_SQL_QUERY} = {name}'");
+
+                var reader = DataBaseHandler.GetCommand($"{Constants.TEAMLEADER_SQL_QUERY} = '{name}'");
                 if (reader.HasRows)
                 {
+                    var teamLeaderId = reader.GetOrdinal(Constants.SQL_ID_COLUMN_NAME);
+                    var teamLeaderName = reader.GetOrdinal(Constants.SQL_NAME_COLUMN_NAME);
                     while (reader.Read())
                     {
                         SelectedTeamLeader = new TeamLeaderModel()
                         {
-                            Id = reader.GetOrdinal(Constants.TEAMLEADER_SQL_ID_COLUMN).ToString(),
-                            Name= reader.GetOrdinal(Constants.TEAMLEADER_SQL_NAME_COLUMN).ToString()
+                            Name = reader.GetString(teamLeaderName),
+                            Id = reader.GetInt32(teamLeaderId)
                         };
-                    }         
+                    }
+       
                     return true;
                 }
             }

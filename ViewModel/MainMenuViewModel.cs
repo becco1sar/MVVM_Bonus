@@ -119,7 +119,7 @@ namespace MVVM_Bonus.ViewModel
         #region Constructors
         public MainMenuViewModel()
         {
-            Messenger.Default.Register<TeamLeaderModel>(this, "getTeamleader", action => GeneratePersons(action));
+            Messenger.Default.Register<TeamLeaderModel>(this, Constants.MESSENGER_TEAMLEADER_IDENTIFICATION, action => GeneratePersons(action));
             
         }
         #endregion
@@ -140,21 +140,31 @@ namespace MVVM_Bonus.ViewModel
         }
         private void GeneratePersons(TeamLeaderModel tl)
         {
+            var teamLeaderId = tl.Id;
             //TODO Try except if null it exexucutes
-            var reader = DataBaseHandler.GetCommand($"SELECT * FROM Workers WHERE Teamleader_id = {tl.Tl_Id} AND Active = 'Yes'");
+            var reader = DataBaseHandler.GetCommand($"SELECT * FROM Workers WHERE Teamleader_id = {teamLeaderId} AND Active = '{Constants.ACTIVE_WORKERS}'");
             if (reader.HasRows)
             {
+                int id = reader.GetOrdinal(Constants.SQL_ID_COLUMN_NAME);
+                int name = reader.GetOrdinal(Constants.SQL_NAME_COLUMN_NAME);
+                int lang = reader.GetOrdinal(Constants.SQL_LANGUAGE_COLUMN_NAME);
+                int role = reader.GetOrdinal(Constants.SQL_ROLE_COLUMN_NAME);    
+                int contractId = reader.GetOrdinal(Constants.SQL_CONTRACT_ID_COLUMN_NAME);
+                int bvId = reader.GetOrdinal(Constants.SQL_BV_ID_COLUMN_NAME);
+
                 while (reader.Read())
                 {
-                    ListPersons.Add(new Person
-                    {
-                        P_Id = Convert.ToInt32(reader.GetValue(0)),
-                        P_Name = reader.GetValue(1).ToString(),
-                        P_Language = reader.GetValue(3).ToString(),
-                        P_Role = reader.GetValue(4).ToString(),
-                        P_Contract = reader.GetValue(6).ToString(),
-                        P_TeamLeaderID = Convert.ToInt32(reader.GetValue(5)),
-                        P_BVID = Convert.ToInt32(reader.GetValue(7))});
+                    ListPersons.Add(
+                        new Person
+                        {                           
+                            P_Id = reader.GetInt32(id),
+                            P_Name = reader.GetString(name),
+                            P_Language = reader.GetString(lang),
+                            P_Role = reader.GetString(role),
+                            P_Contract = reader.GetString(contractId),
+                            P_TeamLeaderID = teamLeaderId,
+                            P_BVID = reader.GetInt32(bvId)                     
+                     });
                 }
                 GetContentPoints();
             }
