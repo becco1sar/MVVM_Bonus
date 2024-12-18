@@ -388,13 +388,12 @@ namespace MVVM_Bonus.ViewModel
                     $"'{val[19]}')");
 
 
-            MyBonusPoints.Add(new BonusModel { WorkerName = Worker.P_Name, Total = CurrentBonusAmount, Amounts = values, Comments = comments, Period = date });
+            BonusModel bonusModel = new BonusModel { WorkerName = Worker.P_Name, Total = CurrentBonusAmount, Amounts = values, Comments = comments, Period = date };
             CommonViewModel.PreviousViewModel = this;
             Mediator.Notify("GoToPrintingView", "");
             Messenger.Default.Send(Worker, "selectedPerson");
-            Messenger.Default.Send(MyBonusPoints, "PrintView");
+            Messenger.Default.Send(bonusModel, "PrintView");
            
-
         }
     }
 }
