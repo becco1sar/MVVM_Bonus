@@ -20,7 +20,7 @@ namespace MVVM_Bonus.ViewModel
         private ObservableCollection<BonusModel> _myBonusPoints;
         private OleDbDataReader _oleDbDReader;
         private Person _worker;
-
+        DataBaseService _databaseService;
         private bool _isFirstBonusSelected;
         private DateTime _datePickerText;
         private decimal _additionalBonus;
@@ -191,6 +191,8 @@ namespace MVVM_Bonus.ViewModel
         {
             Messenger.Default.Register<Person>(this, "InsertView", selectedPerson => GenerateBonusPoints(selectedPerson));
             DatePickerText = DateTime.Today;
+            _databaseService = new DataBaseService();
+
         }
         #endregion
 
@@ -199,7 +201,7 @@ namespace MVVM_Bonus.ViewModel
         {
             Worker = thisPerson;
 
-            _oleDbDReader = DataBaseHandler.GetCommand($"Select * from Bv_General WHERE id = {Worker.P_BVID}");
+            _oleDbDReader = _databaseService.GetCommand($"Select * from Bv_General WHERE id = {Worker.P_BVID}");
 
             var files = Directory.GetFiles($@"O:\Sécurisation\Département Affichage\Controle Adshel 2m²\PRIME DE QUALITE\BETA 2.0{Worker.P_PathToContentCells}", "*.txt", SearchOption.TopDirectoryOnly);
             _total = files.Count();
@@ -253,7 +255,7 @@ namespace MVVM_Bonus.ViewModel
         }
         private bool DateAlreadyExist(string date)
         {
-            var reader = DataBaseHandler.GetCommand($"SELECT * FROM Bonus_General WHERE Worker_id = {Worker.P_Id} AND Period = '{date}'");
+            var reader = _databaseService.GetCommand($"SELECT * FROM Bonus_General WHERE Worker_id = {Worker.P_Id} AND Period = '{date}'");
             if (reader.HasRows)
                 return true;
             return false;
@@ -360,7 +362,7 @@ namespace MVVM_Bonus.ViewModel
             val[_total - 1] = AdditionalBonus.ToString();
             values[_total - 1] = AdditionalBonus;
             comments[_total - 1] = AdditionalComment;
-            DataBaseHandler.InsertCommand($"INSERT INTO Bonus_General " +
+            _databaseService.InsertCommand($"INSERT INTO Bonus_General " +
                 $"(Worker_id,Period,Total,AmountA,AmountB,AmountC,AmountD,AmountE,AmountF,AmountG,AmountH,AmountI,AmountJ,CommentA,CommentB,CommentC,CommentD,CommentE,CommentF,CommentG,CommentH,CommentI,CommentJ) " +
                 $"VALUES (" +
                     $"'{Worker.P_Id}', " +
@@ -388,13 +390,12 @@ namespace MVVM_Bonus.ViewModel
                     $"'{val[19]}')");
 
 
-            MyBonusPoints.Add(new BonusModel { WorkerName = Worker.P_Name, Total = CurrentBonusAmount, Amounts = values, Comments = comments, Period = date });
+            BonusModel bonusModel = new BonusModel { WorkerName = Worker.P_Name, Total = CurrentBonusAmount, Amounts = values, Comments = comments, Period = date };
             CommonViewModel.PreviousViewModel = this;
             Mediator.Notify("GoToPrintingView", "");
             Messenger.Default.Send(Worker, "selectedPerson");
-            Messenger.Default.Send(MyBonusPoints, "PrintView");
+            Messenger.Default.Send(bonusModel, "PrintView");
            
-
         }
     }
 }

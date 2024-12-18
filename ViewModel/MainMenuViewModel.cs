@@ -20,6 +20,7 @@ namespace MVVM_Bonus.ViewModel
         ObservableCollection<Person> _filteredListPerson;
         ICommand _getPersonsBonus;
         ICommand _insertPersonsBonus;
+        DataBaseService _databaseService;
         #endregion
         #region Properties
         public string Search
@@ -119,7 +120,8 @@ namespace MVVM_Bonus.ViewModel
         #region Constructors
         public MainMenuViewModel()
         {
-            Messenger.Default.Register<TeamLeaderModel>(this, Constants.MESSENGER_TEAMLEADER_IDENTIFICATION, action => GenerateWorkers(action));               
+            Messenger.Default.Register<TeamLeaderModel>(this, Constants.MESSENGER_TEAMLEADER_IDENTIFICATION, action => GenerateWorkers(action));   
+            _databaseService = new DataBaseService();
         }
         #endregion
         #region Methods
@@ -141,7 +143,7 @@ namespace MVVM_Bonus.ViewModel
         {
             var teamLeaderId = tl.Id;
             //TODO Try except if null it exexucutes
-            var reader = DataBaseHandler.GetCommand($"{Constants.SQL_GET_WORKER_QUERY} = {teamLeaderId} AND Active = '{Constants.ACTIVE_ROWS}'");
+            var reader = _databaseService.GetCommand($"{Constants.SQL_GET_WORKER_QUERY} = {teamLeaderId} AND Active = '{Constants.ACTIVE_ROWS}'");
             if (reader.HasRows)
             {
                 int id = reader.GetOrdinal(Constants.SQL_ID_COLUMN_NAME);
@@ -171,7 +173,7 @@ namespace MVVM_Bonus.ViewModel
         private string GetAttentionPoint(Person person)
         {
 
-            var reader = DataBaseHandler.GetCommand($"SELECT * FROM Contentcell WHERE Worker_Role = '{person.P_Role}' AND Worker_Language = '{person.P_Language}'");
+            var reader = _databaseService.GetCommand($"SELECT * FROM Contentcell WHERE Worker_Role = '{person.P_Role}' AND Worker_Language = '{person.P_Language}'");
             int pathToContent = reader.GetOrdinal("Path");
             if (reader.HasRows)
             {

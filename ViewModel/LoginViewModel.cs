@@ -12,9 +12,15 @@ namespace MVVM_Bonus.ViewModel
 {
     public class LoginViewModel : ObservableObject, IPageViewModel
     {
-
+        DataBaseService _databaseService;
         string _teamLeaderUserName;
         TeamLeaderModel _selectedTeamLeader;
+
+        public LoginViewModel()
+        {
+            _databaseService = new DataBaseService();
+        }
+
         public ICommand LoginCommand
         {
             get => new RelayCommand(x =>
@@ -58,7 +64,7 @@ namespace MVVM_Bonus.ViewModel
         {
             try
             {
-                var reader = DataBaseHandler.GetCommand($"{Constants.SQL_GET_TEAMLEADER_QUERY} = '{name}'");
+                var reader = _databaseService.GetCommand($"{Constants.SQL_GET_TEAMLEADER_QUERY} = '{name}'");
                 if (reader.HasRows)
                 {
                     var teamLeaderId = reader.GetOrdinal(Constants.SQL_ID_COLUMN_NAME);

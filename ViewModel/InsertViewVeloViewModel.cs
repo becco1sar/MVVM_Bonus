@@ -22,6 +22,7 @@ namespace MVVM_Bonus.ViewModel
         private BonusModel _myBonusPoints;
         private OleDbDataReader _oleDbDReader;
         private Person _worker;
+        DataBaseService _databaseService;
 
         private bool _isFirstBonusSelected;
         private DateTime _datePickerText;
@@ -257,7 +258,7 @@ namespace MVVM_Bonus.ViewModel
         public InsertViewVeloViewModel()
         {
             Messenger.Default.Register<Person>(this, "InsertView", selectedPerson => _generateBonusPoints(selectedPerson));
-
+            _databaseService = new DataBaseService();
 
         }
         #endregion
@@ -267,7 +268,7 @@ namespace MVVM_Bonus.ViewModel
         {
             Worker = thisPerson;
 
-            _oleDbDReader = DataBaseHandler.GetCommand($"Select * from Bv_General WHERE id = {Worker.P_BVID}");
+            _oleDbDReader = _databaseService.GetCommand($"Select * from Bv_General WHERE id = {Worker.P_BVID}");
 
             var files = Directory.GetFiles($@"O:\Sécurisation\Département Affichage\Controle Adshel 2m²\PRIME DE QUALITE\BETA 2.0{Worker.P_PathToContentCells}", "*.txt", SearchOption.TopDirectoryOnly);
             total = files.Count();
@@ -321,7 +322,7 @@ namespace MVVM_Bonus.ViewModel
         }
         private bool _dateAlreadyExist(string date)
         {
-            var reader = DataBaseHandler.GetCommand($"SELECT * FROM Bonus_General WHERE Worker_id = {Worker.P_Id} AND Period = '{date}'");
+            var reader = _databaseService.GetCommand($"SELECT * FROM Bonus_General WHERE Worker_id = {Worker.P_Id} AND Period = '{date}'");
             if (reader.HasRows)
                 return true;
             return false;
@@ -462,7 +463,7 @@ namespace MVVM_Bonus.ViewModel
             val[total - 1] = AdditionalBonus.ToString();
             values[total - 1] = AdditionalBonus;
             comments[total - 1] = AdditionalComment;
-            DataBaseHandler.InsertCommand($"INSERT INTO Bonus_General " +
+            _databaseService.InsertCommand($"INSERT INTO Bonus_General " +
                 $"(Worker_id,Period,Total,AmountA,AmountB,AmountC,AmountD,AmountE,AmountF,AmountG,AmountH,AmountI,AmountJ,CommentA,CommentB,CommentC,CommentD,CommentE,CommentF,CommentG,CommentH,CommentI,CommentJ) " +
                 $"VALUES (" +
                     $"'{Worker.P_Id}', " +

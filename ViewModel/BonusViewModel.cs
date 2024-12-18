@@ -13,11 +13,11 @@ namespace MVVM_Bonus.ViewModel
     {
         #region Fields
         string _search;
- 
+        
         Person _currentPerson;
         BonusModel _BonusPoint;
         BonusModel _selectedBonusModel;
-        
+        DataBaseService _databaseService;
         ObservableCollection<BonusModel> _listBonusModels;
         ObservableCollection<BonusModel> _filteredListBonusModels;
 
@@ -166,6 +166,7 @@ namespace MVVM_Bonus.ViewModel
         public BonusViewModel()
         {
             Messenger.Default.Register<Person>(this, "GetView", callback => _generateListOfBonus(callback));
+            _databaseService = new DataBaseService();
         }
         #endregion
         #region Methods
@@ -189,7 +190,7 @@ namespace MVVM_Bonus.ViewModel
         private void _generateListOfBonus(Person person)
         {
             CurrentPerson = person;
-            OleDbDataReader reader = DataBaseHandler.GetCommand($"SELECT * FROM Bonus_General WHERE Worker_id = {CurrentPerson.P_Id}");
+            OleDbDataReader reader = _databaseService.GetCommand($"SELECT * FROM Bonus_General WHERE Worker_id = {CurrentPerson.P_Id}");
             BonusModel thisBonusModel;
             if (reader.HasRows)
                 while (reader.Read())
