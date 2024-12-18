@@ -1,0 +1,51 @@
+{
+  "polyvalent": {
+    "FR": {},
+    "NL": {}
+  },
+  "technician": {
+    "FR": {},
+    "NL": {}
+  },
+  "afficheur": {
+    "FR": {},
+    "NL": {}
+  },
+  "electrician": {
+    "FR": {},
+    "NL": {}
+  },
+  "bike_technician": {
+    "FR": {},
+    "NL": {}
+  },
+  "fiets_hersteller": {
+    "FR": {},
+    "NL": {}
+  },
+  "head_bike_technician": {
+    "FR": {},
+    "NL": {}
+  },
+  "magasin": {
+    "FR": {},
+    "NL": {}
+  },
+  "pre_posting": {
+    "FR": {},
+    "NL": {}
+
+  },
+  "reconditioning": {
+    "FR": {},
+    "NL": {}
+  },
+  "montage": {
+    "FR": {},
+    "NL": {}
+  },
+  "montage_adshell": {
+    "FR": {},
+    "NL": {}
+  }
+}

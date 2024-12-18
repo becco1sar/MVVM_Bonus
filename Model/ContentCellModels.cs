@@ -8,5 +8,8 @@ namespace MVVM_Bonus.Model
 {
     class ContentCellModels
     {
+        int ID { get; set; }
+        
+        public string Content { get; set; }
     }
 }

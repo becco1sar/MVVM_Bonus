@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MVVM_Bonus.Services
+namespace MVVM_Bonus.Logic
 {
-    internal class InsertLogic
+    public class MainLogic
     {
+
     }
 }

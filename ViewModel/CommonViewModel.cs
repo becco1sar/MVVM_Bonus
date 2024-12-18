@@ -27,12 +27,11 @@ namespace MVVM_Bonus.ViewModel
         {
             get
             {
-                _goToViewModel = "GoToGeneral";
+                _goToViewModel = Constants.MAIN_MENU_VIEW;
                 if (PreviousViewModel != null)
                 {
                     if (PreviousViewModel.GetType().ToString() == "MVVM_Bonus.ViewModel.InsertViewModel")
                     {
-
                         _goToViewModel = "InsertPersonsBonusView";
                     }
                     else if (PreviousViewModel.GetType().ToString() == "MVVM_Bonus.ViewModel.GetBonusViewModel")

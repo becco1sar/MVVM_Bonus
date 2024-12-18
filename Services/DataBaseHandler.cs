@@ -26,23 +26,10 @@ namespace MVVM_Bonus
 
         public static void InsertCommand(string query)
         {
-            if (_cn == null || _cn.State != System.Data.ConnectionState.Open)
-            {
-                try
-                {
-                    _cn = new OleDbConnection(Constants.SQL_CONNECTION_STRING);
-                    _cn.Open();
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show(e.ToString());
-                }
-            }
             _adapter = new OleDbDataAdapter();
             _cmd = new OleDbCommand(query, _cn);
             _adapter.InsertCommand = new OleDbCommand(query, _cn);
             _adapter.InsertCommand.ExecuteNonQuery();
-
         }
     }
 }

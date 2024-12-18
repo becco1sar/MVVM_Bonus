@@ -71,10 +71,10 @@ namespace MVVM_Bonus.ViewModel
 
         private void ShowInsertBonus(object obj)
         {
-            if(TeamLeaderName.ToLower() == "semuna")
-                ChangeViewModel(ListPageViewModel[4]);
-            else
-                ChangeViewModel(ListPageViewModel[3]);
+            //if(TeamLeaderName.ToLower() == "semuna")
+            //    ChangeViewModel(ListPageViewModel[4]);
+            //else
+            ChangeViewModel(ListPageViewModel[3]);
         }
 
         private void ShowBonus(object obj)

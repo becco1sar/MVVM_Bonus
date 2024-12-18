@@ -119,8 +119,7 @@ namespace MVVM_Bonus.ViewModel
         #region Constructors
         public MainMenuViewModel()
         {
-            Messenger.Default.Register<TeamLeaderModel>(this, Constants.MESSENGER_TEAMLEADER_IDENTIFICATION, action => GeneratePersons(action));
-            
+            Messenger.Default.Register<TeamLeaderModel>(this, Constants.MESSENGER_TEAMLEADER_IDENTIFICATION, action => GenerateWorkers(action));               
         }
         #endregion
         #region Methods
@@ -138,11 +137,11 @@ namespace MVVM_Bonus.ViewModel
         {
             FilteredListPerson = ListPersons;
         }
-        private void GeneratePersons(TeamLeaderModel tl)
+        private void GenerateWorkers(TeamLeaderModel tl)
         {
             var teamLeaderId = tl.Id;
             //TODO Try except if null it exexucutes
-            var reader = DataBaseHandler.GetCommand($"SELECT * FROM Workers WHERE Teamleader_id = {teamLeaderId} AND Active = '{Constants.ACTIVE_WORKERS}'");
+            var reader = DataBaseHandler.GetCommand($"{Constants.SQL_GET_WORKER_QUERY} = {teamLeaderId} AND Active = '{Constants.ACTIVE_ROWS}'");
             if (reader.HasRows)
             {
                 int id = reader.GetOrdinal(Constants.SQL_ID_COLUMN_NAME);
@@ -151,37 +150,37 @@ namespace MVVM_Bonus.ViewModel
                 int role = reader.GetOrdinal(Constants.SQL_ROLE_COLUMN_NAME);    
                 int contractId = reader.GetOrdinal(Constants.SQL_CONTRACT_ID_COLUMN_NAME);
                 int bvId = reader.GetOrdinal(Constants.SQL_BV_ID_COLUMN_NAME);
-
+                
                 while (reader.Read())
                 {
-                    ListPersons.Add(
-                        new Person
-                        {                           
-                            P_Id = reader.GetInt32(id),
-                            P_Name = reader.GetString(name),
-                            P_Language = reader.GetString(lang),
-                            P_Role = reader.GetString(role),
-                            P_Contract = reader.GetString(contractId),
-                            P_TeamLeaderID = teamLeaderId,
-                            P_BVID = reader.GetInt32(bvId)                     
-                     });
+                    Person person = new Person();
+                    person.P_Id = reader.GetInt32(id);
+                    person.P_Name = reader.GetString(name);
+                    person.P_Language = reader.GetString(lang);
+                    person.P_Role = reader.GetString(role);
+                    person.P_Contract = reader.GetString(contractId);
+                    person.P_TeamLeaderID = teamLeaderId;
+                    person.P_BVID = reader.GetInt32(bvId);
+                    person.P_PathToContentCells = GetAttentionPoint(person);
+                    ListPersons.Add(person);
                 }
-                GetContentPoints();
+         
             }
         }
-        private void GetContentPoints()
+        
+        private string GetAttentionPoint(Person person)
         {
-            foreach(var person in ListPersons)
+
+            var reader = DataBaseHandler.GetCommand($"SELECT * FROM Contentcell WHERE Worker_Role = '{person.P_Role}' AND Worker_Language = '{person.P_Language}'");
+            int pathToContent = reader.GetOrdinal("Path");
+            if (reader.HasRows)
             {
-                var reader = DataBaseHandler.GetCommand($"SELECT * FROM Contentcell WHERE Worker_Role = '{person.P_Role}' AND Worker_Language = '{person.P_Language}'");
-                if (reader.HasRows)
+                while (reader.Read())
                 {
-                    while (reader.Read())
-                    {
-                        person.P_PathToContentCells = reader.GetValue(3).ToString();
-                    }
+                    return reader.GetString(pathToContent);
                 }
-            }                        
+            }
+            return "";                   
         }
         #endregion
     }

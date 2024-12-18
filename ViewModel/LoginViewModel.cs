@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
+using MVVM_Bonus.Logic;
 using MVVM_Bonus.Services;
 using System;
 using System.Data.OleDb;
@@ -14,14 +15,12 @@ namespace MVVM_Bonus.ViewModel
 
         string _teamLeaderUserName;
         TeamLeaderModel _selectedTeamLeader;
-
         public ICommand LoginCommand
         {
             get => new RelayCommand(x =>
             {
                 if (IsTeamLeaderInDatabase(TeamLeaderUserName))
                 {
-                    //SelectedTeamLeader = teamLeaderModels.Where(x => x.Tl_Name == LoginName).First();
                     Mediator.Notify(Constants.MAIN_MENU_VIEW, "");
                     Messenger.Default.Send(SelectedTeamLeader, Constants.MESSENGER_TEAMLEADER_IDENTIFICATION);
                 }
@@ -59,8 +58,7 @@ namespace MVVM_Bonus.ViewModel
         {
             try
             {
-
-                var reader = DataBaseHandler.GetCommand($"{Constants.TEAMLEADER_SQL_QUERY} = '{name}'");
+                var reader = DataBaseHandler.GetCommand($"{Constants.SQL_GET_TEAMLEADER_QUERY} = '{name}'");
                 if (reader.HasRows)
                 {
                     var teamLeaderId = reader.GetOrdinal(Constants.SQL_ID_COLUMN_NAME);
@@ -72,8 +70,7 @@ namespace MVVM_Bonus.ViewModel
                             Name = reader.GetString(teamLeaderName),
                             Id = reader.GetInt32(teamLeaderId)
                         };
-                    }
-       
+                    };       
                     return true;
                 }
             }

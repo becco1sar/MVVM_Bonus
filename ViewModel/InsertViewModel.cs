@@ -249,9 +249,9 @@ namespace MVVM_Bonus.ViewModel
         private void BackToGeneral()
         {
             MyBonusValuePoints.Clear();
-            Mediator.Notify("GoToGeneral", "");
+            Mediator.Notify(Constants.MAIN_MENU_VIEW, "");
         }
-        private bool _dateAlreadyExist(string date)
+        private bool DateAlreadyExist(string date)
         {
             var reader = DataBaseHandler.GetCommand($"SELECT * FROM Bonus_General WHERE Worker_id = {Worker.P_Id} AND Period = '{date}'");
             if (reader.HasRows)
@@ -289,13 +289,14 @@ namespace MVVM_Bonus.ViewModel
         {
             string date = $@"{DatePickerText.Month}\{DatePickerText.Year}";
 
-            if (_dateAlreadyExist(date))
+            //TODO: seperation of concern 
+            if (DateAlreadyExist(date))
             {
                 MessageBox.Show("There is already a bonus for this period");
                 return;
             }
 
-            string helloWorld = $"Report\nName: {Worker.P_Name}\nDate: {date}\n";
+            string presentation = $"Report\nName: {Worker.P_Name}\nDate: {date}\n";
             string queryValues = "";
             string queryComments = "";
             string[] val = { "0.00", "0.00", "0.00", "0.00", "0.00", "0.00", "0.00", "0.00", "0.00", "0.00", "", "", "", "", "", "", "", "", "", "" };
@@ -340,7 +341,7 @@ namespace MVVM_Bonus.ViewModel
                     amount = 0.00M;
                 if (item.Comment != string.Empty)
                     comment = item.Comment;
-                helloWorld = helloWorld + $"{item.Item}: {amount}\n";
+                presentation = presentation + $"{item.Item}: {amount}\n";
                 val[index] = amount.ToString();
                 val[index + 10] = comment;
                 values[index] = amount;
@@ -354,7 +355,7 @@ namespace MVVM_Bonus.ViewModel
                 queryComments += $"'{comments[i]}',";    
             }
 
-            helloWorld = helloWorld + $"Total: {CurrentBonusAmount}";
+            presentation = presentation + $"Total: {CurrentBonusAmount}";
             //MessageBox.Show(helloWorld);
             val[_total - 1] = AdditionalBonus.ToString();
             values[_total - 1] = AdditionalBonus;

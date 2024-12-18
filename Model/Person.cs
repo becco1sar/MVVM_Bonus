@@ -17,7 +17,7 @@ namespace MVVM_Bonus.Model
         private int p_Id;
         private int p_TeamLeaderID;
         private string p_PathToContentCells;
-        public string P_Name
+        public string P_Name 
         {
             get
             {

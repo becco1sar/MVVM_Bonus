@@ -2,15 +2,12 @@
 using MVVM_Bonus.Model;
 using System;
 using System.Collections.ObjectModel;
-using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Xps.Packaging;
-using System.Windows.Xps;
 using MVVM_Bonus.Services;
 
 namespace MVVM_Bonus.ViewModel
@@ -34,25 +31,24 @@ namespace MVVM_Bonus.ViewModel
         private IPageViewModel _previousViewModel;
         public PrintingViewModel()
         {
-            Messenger.Default.Register<Person>(this, "selectedPerson", person => savePerson(person));
-            Messenger.Default.Register<BonusModel>(this, "PrintView", bonusPoints => _generateBonusPoints(bonusPoints));
-            Messenger.Default.Register<IPageViewModel>(this, "PreviousView", view => storePreviousView(view));
+            Messenger.Default.Register<Person>(this, "selectedPerson", person => SavePerson(person));
+            Messenger.Default.Register<BonusModel>(this, "PrintView", bonusPoints => GenerateBonusPoints(bonusPoints));
+            Messenger.Default.Register<IPageViewModel>(this, "PreviousView", view => StorePreviousView(view));
         }
 
-        private string storePreviousView(IPageViewModel view)
+        private string StorePreviousView(IPageViewModel view)
         {
-            string back = "GoToGeneral";
+            string back = Constants.MAIN_MENU_VIEW;
             if (view.GetType() == typeof(InsertViewModel))
                 back = "GetPersonsBonusView";
             return back;
 
         }
 
-        private void savePerson(Person person)
+        private void SavePerson(Person person)
         {
             ConceredPerson = person;
             ListDetailPoints = DetailPoints.GenerateDetailPoints(@$"O:\Sécurisation\Département Affichage\Controle Adshel 2m²\PRIME DE QUALITE\BETA 2.0{ConceredPerson.P_PathToContentCells}");
-
         }
 
         public BonusModel MyBonusPoints 
@@ -146,14 +142,11 @@ namespace MVVM_Bonus.ViewModel
             {
                 if(_btnPrintPreview == null)
                 {
-                    _btnPrintPreview = new RelayCommand(param => _showPrintPreview((Visual)param));
-
+                    _btnPrintPreview = new RelayCommand(param => ShowPrintPreview((Visual)param));
                 }
                 return _btnPrintPreview;
-            }
-      
+            }      
         }
-
         public ICommand BtnBackButton 
         {
             get
@@ -185,16 +178,15 @@ namespace MVVM_Bonus.ViewModel
             }
         }
 
-        private void _showPrintPreview(Visual x)
+        private void ShowPrintPreview(Visual x)
         {
             PrintDialog pd = new();
             Grid g = (Grid)x;
 
-            pd.PrintVisual(g, "Printing");
-            
+            pd.PrintVisual(g, "Printing");            
         }
 
-        private void _generateBonusPoints(BonusModel bvm)
+        private void GenerateBonusPoints(BonusModel bvm)
         {            
             MyBonusDetails = new ObservableCollection<BonusDetailModel>();
             MyBonusPoints = bvm;
@@ -213,7 +205,6 @@ namespace MVVM_Bonus.ViewModel
             {
                 MessageBox.Show(e.ToString());
             }
-
         }
     }
 }
