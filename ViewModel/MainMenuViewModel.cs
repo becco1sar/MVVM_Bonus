@@ -141,7 +141,7 @@ namespace MVVM_Bonus.ViewModel
         {
             var teamLeaderId = tl.Id;
             //TODO Try except if null it exexucutes
-            var reader = DataBaseHandler.GetCommand($"{Constants.SQL_GET_WORKER_QUERY} = {teamLeaderId} AND Active = '{Constants.ACTIVE_ROWS}'");
+            var reader = DataBaseService.GetCommand($"{Constants.SQL_GET_WORKER_QUERY} = {teamLeaderId} AND Active = '{Constants.ACTIVE_ROWS}'");
             if (reader.HasRows)
             {
                 int id = reader.GetOrdinal(Constants.SQL_ID_COLUMN_NAME);
@@ -171,7 +171,7 @@ namespace MVVM_Bonus.ViewModel
         private string GetAttentionPoint(Person person)
         {
 
-            var reader = DataBaseHandler.GetCommand($"SELECT * FROM Contentcell WHERE Worker_Role = '{person.P_Role}' AND Worker_Language = '{person.P_Language}'");
+            var reader = DataBaseService.GetCommand($"SELECT * FROM Contentcell WHERE Worker_Role = '{person.P_Role}' AND Worker_Language = '{person.P_Language}'");
             int pathToContent = reader.GetOrdinal("Path");
             if (reader.HasRows)
             {

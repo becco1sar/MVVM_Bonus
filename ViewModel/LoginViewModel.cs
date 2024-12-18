@@ -58,7 +58,7 @@ namespace MVVM_Bonus.ViewModel
         {
             try
             {
-                var reader = DataBaseHandler.GetCommand($"{Constants.SQL_GET_TEAMLEADER_QUERY} = '{name}'");
+                var reader = DataBaseService.GetCommand($"{Constants.SQL_GET_TEAMLEADER_QUERY} = '{name}'");
                 if (reader.HasRows)
                 {
                     var teamLeaderId = reader.GetOrdinal(Constants.SQL_ID_COLUMN_NAME);

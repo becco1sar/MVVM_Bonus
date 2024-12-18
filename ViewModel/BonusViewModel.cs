@@ -189,7 +189,7 @@ namespace MVVM_Bonus.ViewModel
         private void _generateListOfBonus(Person person)
         {
             CurrentPerson = person;
-            OleDbDataReader reader = DataBaseHandler.GetCommand($"SELECT * FROM Bonus_General WHERE Worker_id = {CurrentPerson.P_Id}");
+            OleDbDataReader reader = DataBaseService.GetCommand($"SELECT * FROM Bonus_General WHERE Worker_id = {CurrentPerson.P_Id}");
             BonusModel thisBonusModel;
             if (reader.HasRows)
                 while (reader.Read())
