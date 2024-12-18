@@ -16,7 +16,7 @@ namespace MVVM_Bonus
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            DataBaseService.CreateConnection();
+            
         }
     }
 }
