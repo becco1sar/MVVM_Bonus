@@ -120,7 +120,8 @@ namespace MVVM_Bonus.ViewModel
         #region Constructors
         public MainMenuViewModel()
         {
-            Messenger.Default.Register<TeamLeaderModel>(this, Constants.MESSENGER_TEAMLEADER_IDENTIFICATION, action => GenerateWorkers(action));               
+            Messenger.Default.Register<TeamLeaderModel>(this, Constants.MESSENGER_TEAMLEADER_IDENTIFICATION, action => GenerateWorkers(action));   
+            _databaseService = new DataBaseService();
         }
         #endregion
         #region Methods

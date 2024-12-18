@@ -191,6 +191,8 @@ namespace MVVM_Bonus.ViewModel
         {
             Messenger.Default.Register<Person>(this, "InsertView", selectedPerson => GenerateBonusPoints(selectedPerson));
             DatePickerText = DateTime.Today;
+            _databaseService = new DataBaseService();
+
         }
         #endregion
 

@@ -258,7 +258,7 @@ namespace MVVM_Bonus.ViewModel
         public InsertViewVeloViewModel()
         {
             Messenger.Default.Register<Person>(this, "InsertView", selectedPerson => _generateBonusPoints(selectedPerson));
-
+            _databaseService = new DataBaseService();
 
         }
         #endregion

@@ -15,6 +15,12 @@ namespace MVVM_Bonus.ViewModel
         DataBaseService _databaseService;
         string _teamLeaderUserName;
         TeamLeaderModel _selectedTeamLeader;
+
+        public LoginViewModel()
+        {
+            _databaseService = new DataBaseService();
+        }
+
         public ICommand LoginCommand
         {
             get => new RelayCommand(x =>
