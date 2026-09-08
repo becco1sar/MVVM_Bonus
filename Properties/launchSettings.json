@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "MVVM_Bonus (via dotnet host)": {
+      "commandName": "Executable",
+      "executablePath": "dotnet",
+      "commandLineArgs": "MVVM_Bonus.dll",
+      "workingDirectory": "$(OutDir)"
+    }
+  }
+}
