@@ -50,7 +50,7 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <!-- ---------- History list ---------- -->
+            <!-- ===== History list ===== -->
             <Border Grid.Column="0" Style="{StaticResource Panel}" Margin="20">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -130,7 +130,7 @@
                 </Grid>
             </Border>
 
-            <!-- ---------- Detail and print ---------- -->
+            <!-- ===== Detail and print ===== -->
             <Border Grid.Column="1"
                     Width="620"
                     Background="{StaticResource BgSidebar}"

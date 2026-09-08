@@ -216,11 +216,29 @@
                                                        Foreground="{StaticResource TextSecondary}"
                                                        VerticalAlignment="Center"
                                                        Margin="0,0,10,0"/>
-                                            <Border Style="{StaticResource Badge}"
-                                                    Background="{Binding ProgressColor}"
-                                                    Padding="9,4">
-                                                <TextBlock Style="{StaticResource BadgeText}"
-                                                           Text="{Binding ProgressPercentText}"/>
+                                            <Border Padding="9,4">
+                                                <Border.Style>
+                                                    <Style TargetType="Border" BasedOn="{StaticResource Badge}">
+                                                        <Setter Property="Background" Value="{StaticResource WarningSoft}"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsFullyCompleted}" Value="True">
+                                                                <Setter Property="Background" Value="{StaticResource SuccessSoft}"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Border.Style>
+                                                <TextBlock Text="{Binding ProgressPercentText}">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock" BasedOn="{StaticResource BadgeText}">
+                                                            <Setter Property="Foreground" Value="{StaticResource WarningBrush}"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsFullyCompleted}" Value="True">
+                                                                    <Setter Property="Foreground" Value="{StaticResource SuccessBrush}"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
                                             </Border>
                                         </StackPanel>
 
@@ -232,8 +250,18 @@
                                             <ProgressBar Grid.Column="0"
                                                          Minimum="0" Maximum="1"
                                                          Value="{Binding ProgressFraction, Mode=OneWay}"
-                                                         Foreground="{Binding ProgressColor}"
-                                                         VerticalAlignment="Center"/>
+                                                         VerticalAlignment="Center">
+                                                <ProgressBar.Style>
+                                                    <Style TargetType="ProgressBar" BasedOn="{StaticResource {x:Type ProgressBar}}">
+                                                        <Setter Property="Foreground" Value="{StaticResource WarningBrush}"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsFullyCompleted}" Value="True">
+                                                                <Setter Property="Foreground" Value="{StaticResource SuccessBrush}"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </ProgressBar.Style>
+                                            </ProgressBar>
                                             <TextBlock Grid.Column="1"
                                                        Style="{StaticResource TextCaption}"
                                                        Text="{Binding RemainingText}"

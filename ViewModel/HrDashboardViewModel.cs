@@ -56,7 +56,10 @@ namespace MVVM_Bonus.ViewModel
             }
         }
 
-        public string ProgressColor => IsFullyCompleted ? "#4CAF50" : "#FF9800";
+        // Colour deliberately absent: whether a row reads as done or outstanding is a
+        // presentation decision, driven from IsFullyCompleted against the design
+        // tokens in the view. A view model returning "#4CAF50" put two theme colours
+        // outside the one place that defines them.
     }
 
     public class HrDashboardViewModel : ObservableObject, IPageViewModel
