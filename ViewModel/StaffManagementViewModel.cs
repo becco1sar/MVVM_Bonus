@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Data.OleDb;
 using System.Windows.Input;
@@ -51,14 +51,39 @@ namespace MVVM_Bonus.ViewModel
         private bool _editActive;
         public bool EditActive { get => _editActive; set { _editActive = value; OnPropertyChanged(nameof(EditActive)); } }
 
+        private string _statusMessage;
+
+        /// <summary>
+        /// Result of the last save. Every database call here used to fail into an empty
+        /// catch block, so a failed save looked exactly like a successful one.
+        /// </summary>
+        public string StatusMessage
+        {
+            get => _statusMessage;
+            private set { _statusMessage = value; OnPropertyChanged(nameof(StatusMessage)); }
+        }
+
+        private bool _isStatusError;
+        public bool IsStatusError
+        {
+            get => _isStatusError;
+            private set { _isStatusError = value; OnPropertyChanged(nameof(IsStatusError)); }
+        }
+
         public ICommand SaveCommand { get; private set; }
         public ICommand AddNewCommand { get; private set; }
         public ICommand BackCommand { get; private set; }
 
+        private void Report(string message, bool isError = false)
+        {
+            IsStatusError = isError;
+            StatusMessage = message;
+        }
+
         public StaffManagementViewModel()
         {
-            SaveCommand = new RelayCommand(SaveWorker);
-            AddNewCommand = new RelayCommand(AddNewWorker);
+            SaveCommand = new RelayCommand(SaveWorker, x => SelectedWorker != null && !string.IsNullOrWhiteSpace(EditName));
+            AddNewCommand = new RelayCommand(AddNewWorker, x => !string.IsNullOrWhiteSpace(EditName));
             BackCommand = new RelayCommand(GoBack);
             LoadWorkers();
         }
@@ -90,12 +115,19 @@ namespace MVVM_Bonus.ViewModel
                     }
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Report($"Could not load the employee directory: {ex.Message}", isError: true);
+            }
         }
 
         private void SaveWorker(object obj)
         {
-            if (SelectedWorker == null || string.IsNullOrWhiteSpace(EditName)) return;
+            if (SelectedWorker == null || string.IsNullOrWhiteSpace(EditName))
+            {
+                Report("Select an employee and enter a name before saving.", isError: true);
+                return;
+            }
 
             try
             {
@@ -113,13 +145,21 @@ namespace MVVM_Bonus.ViewModel
                     }
                 }
                 LoadWorkers();
+                Report($"Saved changes to {EditName}.");
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Report($"Save failed: {ex.Message}", isError: true);
+            }
         }
 
         private void AddNewWorker(object obj)
         {
-            if (string.IsNullOrWhiteSpace(EditName)) return;
+            if (string.IsNullOrWhiteSpace(EditName))
+            {
+                Report("Enter a name before adding an employee.", isError: true);
+                return;
+            }
 
             try
             {
@@ -136,8 +176,16 @@ namespace MVVM_Bonus.ViewModel
                     }
                 }
                 LoadWorkers();
+
+                // Deliberately blunt: the insert sets no Teamleader_id, so the new record
+                // will not show up in any team leader's list until one is assigned.
+                Report($"Added {EditName}. No team leader is assigned yet, so they will not "
+                       + "appear in any team leader's list.", isError: true);
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Report($"Could not add the employee: {ex.Message}", isError: true);
+            }
         }
 
         private void GoBack(object obj)

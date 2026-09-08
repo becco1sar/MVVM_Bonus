@@ -1,4 +1,4 @@
-using GalaSoft.MvvmLight.Messaging;
+﻿using GalaSoft.MvvmLight.Messaging;
 using System.Collections.Generic;
 using System.Data;
 using System.Windows;
@@ -21,9 +21,38 @@ namespace MVVM_Bonus.ViewModel
         ObservableCollection<Person> _filteredListPerson;
         ICommand _getPersonsBonus;
         ICommand _insertPersonsBonus;
+        ICommand _signOutCommand;
         DataBaseService _databaseService;
+        string _teamLeaderName;
+        bool _isLoading;
         #endregion
         #region Properties
+        /// <summary>Signed-in team leader, shown in the header so shared machines are unambiguous.</summary>
+        public string TeamLeaderName
+        {
+            get => _teamLeaderName;
+            private set { _teamLeaderName = value; OnPropertyChanged(); }
+        }
+
+        public bool IsLoading
+        {
+            get => _isLoading;
+            private set { _isLoading = value; OnPropertyChanged(); }
+        }
+
+        /// <summary>True when the team has loaded but is empty, so the list can say so.</summary>
+        public bool HasNoWorkers => !IsLoading && ListPersons.Count == 0;
+
+        /// <summary>
+        /// True when a search is active but matches nothing. Distinct from
+        /// <see cref="HasNoWorkers"/>: "no results for 'xyz'" and "no team members" are
+        /// different problems and need different wording.
+        /// </summary>
+        public bool HasNoSearchResults =>
+            !IsLoading
+            && ListPersons.Count > 0
+            && FilteredListPerson.Count == 0;
+
         public string Search
         {
             get => _search;
@@ -74,42 +103,60 @@ namespace MVVM_Bonus.ViewModel
                 OnPropertyChanged();
             }
         }
+        /// <summary>
+        /// Opens the selected employee's bonus history. Disabled until someone is selected,
+        /// which is why there is no longer a "please select a worker first" pop-up: an
+        /// unavailable button explains itself before the click instead of after it.
+        /// </summary>
         public ICommand GetPersonsBonus
         {
             get
             {
-
-                return _getPersonsBonus ?? (new RelayCommand(x =>
+                if (_getPersonsBonus == null)
                 {
-                    if (SelectedWorker == null)
-                    {
-                        MessageBox.Show("Please select a worker first !");
-                        return;
-                    }
-
-                    Mediator.Notify("GetPersonsBonusView", "");
-                    Messenger.Default.Send(SelectedWorker, "GetView");
-
-                }));
+                    _getPersonsBonus = new RelayCommand(
+                        x =>
+                        {
+                            Mediator.Notify(Constants.GET_BONUS_VIEW, "");
+                            Messenger.Default.Send(SelectedWorker, Constants.MESSENGER_GET_VIEW);
+                        },
+                        x => SelectedWorker != null);
+                }
+                return _getPersonsBonus;
             }
         }
+
+        /// <summary>Starts a new bonus for the selected employee.</summary>
         public ICommand InsertPersonsBonus
         {
             get
             {
-
-                return _insertPersonsBonus ?? (new RelayCommand(x =>
+                if (_insertPersonsBonus == null)
                 {
-                    if (SelectedWorker == null)
-                    {
-                        MessageBox.Show("Please select a worker first !");
-                        return;
-                    }
-                    Mediator.Notify("InsertPersonsBonusView", SelectedWorker);
-                    Messenger.Default.Send(SelectedWorker, "InsertView");
-                }));
+                    _insertPersonsBonus = new RelayCommand(
+                        x =>
+                        {
+                            Mediator.Notify(Constants.INSERT_BONUS_VIEW, SelectedWorker);
+                            Messenger.Default.Send(SelectedWorker, Constants.MESSENGER_INSERT_VIEW);
+                        },
+                        x => SelectedWorker != null);
+                }
+                return _insertPersonsBonus;
             }
+        }
 
+        /// <summary>
+        /// Ends the session. Team leaders had no way out of this screen except closing the
+        /// window, which left the next person signed in as them on a shared machine.
+        /// </summary>
+        public ICommand SignOutCommand
+        {
+            get
+            {
+                if (_signOutCommand == null)
+                    _signOutCommand = new RelayCommand(x => Mediator.Notify(Constants.SIGN_OUT, ""));
+                return _signOutCommand;
+            }
         }
         #endregion
         #region Constructors
@@ -133,6 +180,9 @@ namespace MVVM_Bonus.ViewModel
                     .ToList();
                 FilteredListPerson = new ObservableCollection<Person>(matches);
             }
+
+            OnPropertyChanged(nameof(HasNoWorkers));
+            OnPropertyChanged(nameof(HasNoSearchResults));
         }
 
         private void ShowAll()
@@ -142,8 +192,18 @@ namespace MVVM_Bonus.ViewModel
         private void GenerateWorkers(TeamLeaderModel tl)
         {
             if (tl == null) return;
+
+            TeamLeaderName = tl.Name;
+            IsLoading = true;
+
             try
             {
+                // A reload means a different team: drop the previous selection and search
+                // so the profile card cannot keep showing someone who is no longer listed.
+                SelectedWorker = null;
+                _search = string.Empty;
+                OnPropertyChanged(nameof(Search));
+
                 ListPersons.Clear();
                 var table = _databaseService.ExecuteQuery(Constants.SQL_GET_WORKER_QUERY, tl.Id, Constants.ACTIVE_ROWS);
                 foreach (DataRow row in table.Rows)
@@ -165,7 +225,17 @@ namespace MVVM_Bonus.ViewModel
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading workers: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    $"Could not load your team.\n\n{ex.Message}",
+                    "Connection problem",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+            finally
+            {
+                IsLoading = false;
+                OnPropertyChanged(nameof(HasNoWorkers));
+                OnPropertyChanged(nameof(HasNoSearchResults));
             }
         }
         

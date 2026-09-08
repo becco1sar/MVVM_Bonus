@@ -1,4 +1,4 @@
-using GalaSoft.MvvmLight.Messaging;
+﻿using GalaSoft.MvvmLight.Messaging;
 using MVVM_Bonus.Model;
 using System;
 using System.Collections.ObjectModel;
@@ -40,7 +40,7 @@ namespace MVVM_Bonus.ViewModel
         {
             string back = Constants.MAIN_MENU_VIEW;
             if (view.GetType() == typeof(InsertViewModel))
-                back = "GetPersonsBonusView";
+                back = Constants.GET_BONUS_VIEW;
             return back;
 
         }

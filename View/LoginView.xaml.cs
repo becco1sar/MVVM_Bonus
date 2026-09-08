@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace MVVM_Bonus.View
 {
@@ -23,6 +11,17 @@ namespace MVVM_Bonus.View
         public LoginView()
         {
             InitializeComponent();
+            Loaded += LoginView_Loaded;
+        }
+
+        /// <summary>
+        /// Puts the caret in the only field on the screen, so signing in is type-then-Enter
+        /// rather than click-then-type-then-click.
+        /// </summary>
+        private void LoginView_Loaded(object sender, RoutedEventArgs e)
+        {
+            UserNameBox.Focus();
+            UserNameBox.SelectAll();
         }
     }
 }

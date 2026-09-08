@@ -1,10 +1,14 @@
-<UserControl x:Class="MVVM_Bonus.View.StaffManagementView"
+﻿<UserControl x:Class="MVVM_Bonus.View.StaffManagementView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MVVM_Bonus.Utilities"
              mc:Ignorable="d" 
              d:DesignHeight="800" d:DesignWidth="1200">
+    <UserControl.Resources>
+        <local:NullToVisibilityConverter x:Key="NullToVis"/>
+    </UserControl.Resources>
     <Grid Background="#1A1225">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -86,6 +90,27 @@
                             </Button.Background>
                         </Button>
                     </StackPanel>
+
+                    <!-- Save feedback. Both database calls behind this form used to fail
+                         silently, so a failed save was indistinguishable from a good one. -->
+                    <Border Margin="0,20,0,0" CornerRadius="8" Padding="14,10"
+                            Visibility="{Binding StatusMessage, Converter={StaticResource NullToVis}}">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Background" Value="#1F3D33"/>
+                                <Setter Property="BorderBrush" Value="#00B8A9"/>
+                                <Setter Property="BorderThickness" Value="1"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsStatusError}" Value="True">
+                                        <Setter Property="Background" Value="#3D2230"/>
+                                        <Setter Property="BorderBrush" Value="#F44336"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <TextBlock Text="{Binding StatusMessage}" Foreground="#FFFFFF"
+                                   FontSize="13" TextWrapping="Wrap"/>
+                    </Border>
                 </StackPanel>
             </Border>
         </Grid>

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Data.OleDb;
 using System.Windows.Input;
@@ -53,12 +53,34 @@ namespace MVVM_Bonus.ViewModel
         public decimal EditI { get => _editI; set { _editI = value; OnPropertyChanged(nameof(EditI)); } }
         public decimal EditJ { get => _editJ; set { _editJ = value; OnPropertyChanged(nameof(EditJ)); } }
 
+        private string _statusMessage;
+
+        /// <summary>Result of the last save; previously swallowed by an empty catch block.</summary>
+        public string StatusMessage
+        {
+            get => _statusMessage;
+            private set { _statusMessage = value; OnPropertyChanged(nameof(StatusMessage)); }
+        }
+
+        private bool _isStatusError;
+        public bool IsStatusError
+        {
+            get => _isStatusError;
+            private set { _isStatusError = value; OnPropertyChanged(nameof(IsStatusError)); }
+        }
+
         public ICommand SaveCommand { get; private set; }
         public ICommand BackCommand { get; private set; }
 
+        private void Report(string message, bool isError = false)
+        {
+            IsStatusError = isError;
+            StatusMessage = message;
+        }
+
         public BonusConfigViewModel()
         {
-            SaveCommand = new RelayCommand(SaveConfig);
+            SaveCommand = new RelayCommand(SaveConfig, x => SelectedConfig != null);
             BackCommand = new RelayCommand(x => Mediator.Notify(Constants.HR_DASHBOARD_VIEW, ""));
             LoadConfigs();
         }
@@ -95,12 +117,19 @@ namespace MVVM_Bonus.ViewModel
                     }
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Report($"Could not load the bonus profiles: {ex.Message}", isError: true);
+            }
         }
 
         private void SaveConfig(object obj)
         {
-            if (SelectedConfig == null) return;
+            if (SelectedConfig == null)
+            {
+                Report("Select a profile before saving.", isError: true);
+                return;
+            }
             try
             {
                 using (OleDbConnection conn = new OleDbConnection(Constants.SQL_CONNECTION_STRING))
@@ -118,9 +147,14 @@ namespace MVVM_Bonus.ViewModel
                         cmd.ExecuteNonQuery();
                     }
                 }
+                int savedId = SelectedConfig.Id;
                 LoadConfigs();
+                Report($"Saved profile {savedId}.");
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Report($"Save failed: {ex.Message}", isError: true);
+            }
         }
     }
 }

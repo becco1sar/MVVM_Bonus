@@ -1,4 +1,4 @@
-using GalaSoft.MvvmLight.Messaging;
+﻿using GalaSoft.MvvmLight.Messaging;
 using MVVM_Bonus.Model;
 using MVVM_Bonus.Services;
 using System;
@@ -257,7 +257,7 @@ namespace MVVM_Bonus.ViewModel
 		public InsertViewModel()
 		{
 			_reportService = new ReportService();
-			Messenger.Default.Register<Person>(this, "InsertView", selectedPerson => GenerateBonusPoints(selectedPerson));
+			Messenger.Default.Register<Person>(this, Constants.MESSENGER_INSERT_VIEW, selectedPerson => GenerateBonusPoints(selectedPerson));
 			DatePickerText = DateTime.Today;
 			_databaseService = new DataBaseService();
 		}

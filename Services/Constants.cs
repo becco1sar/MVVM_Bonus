@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 
 namespace MVVM_Bonus.Services
@@ -20,11 +20,31 @@ namespace MVVM_Bonus.Services
 
         public static string SQL_CONNECTION_STRING => $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={GetDatabaseFilePath()};";
 
+        // ---- Navigation route tokens ----------------------------------------
+        // These values are also the Mediator tokens. Keep the literal strings
+        // unchanged: older call sites used them inline.
+        public const string LOGIN_VIEW = "LoginView";
         public const string MAIN_MENU_VIEW = "MainMenuView";
+        public const string GET_BONUS_VIEW = "GetPersonsBonusView";
+        public const string INSERT_BONUS_VIEW = "InsertPersonsBonusView";
+        public const string PRINTING_VIEW = "GoToPrintingView";
         public const string HR_DASHBOARD_VIEW = "HrDashboardView";
         public const string STAFF_MANAGEMENT_VIEW = "StaffManagementView";
         public const string BONUS_CONFIG_VIEW = "BonusConfigView";
+
+        /// <summary>Tears down the signed-in session and returns to the login screen.</summary>
+        public const string SIGN_OUT = "SignOut";
+
+        // ---- Messenger tokens ------------------------------------------------
         public const string MESSENGER_TEAMLEADER_IDENTIFICATION = "SendTeamLeader";
+        public const string MESSENGER_INSERT_VIEW = "InsertView";
+        public const string MESSENGER_GET_VIEW = "GetView";
+
+        // ---- Roles -----------------------------------------------------------
+        public const string ROLE_HR = "HR";
+
+        // ---- Branding --------------------------------------------------------
+        public const string COMPANY_NAME = "Bauer Media Outdoor";
 
         public const string SQL_GET_TEAMLEADER_QUERY = "SELECT * FROM Teamleaders WHERE username = ?";
         public const string SQL_GET_WORKER_QUERY = "SELECT * FROM Workers WHERE Teamleader_id = ? AND Active = ?";

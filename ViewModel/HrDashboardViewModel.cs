@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
@@ -288,7 +288,7 @@ namespace MVVM_Bonus.ViewModel
 
         private void Logout(object obj)
         {
-            Mediator.Notify("LoginView", "");
+            Mediator.Notify(Constants.SIGN_OUT, "");
         }
     }
 }

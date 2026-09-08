@@ -32,11 +32,11 @@ namespace MVVM_Bonus.ViewModel
                 {
                     if (PreviousViewModel.GetType().ToString() == "MVVM_Bonus.ViewModel.InsertViewModel")
                     {
-                        _goToViewModel = "InsertPersonsBonusView";
+                        _goToViewModel = Constants.INSERT_BONUS_VIEW;
                     }
-                    else if (PreviousViewModel.GetType().ToString() == "MVVM_Bonus.ViewModel.GetBonusViewModel")
+                    else if (PreviousViewModel.GetType().ToString() == "MVVM_Bonus.ViewModel.BonusViewModel")
                     {
-                        _goToViewModel = "GetPersonsBonusView";
+                        _goToViewModel = Constants.GET_BONUS_VIEW;
                     }
                 }
                 

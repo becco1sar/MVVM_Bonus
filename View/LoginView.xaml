@@ -1,11 +1,14 @@
-<UserControl x:Class="MVVM_Bonus.View.LoginView"
+﻿<UserControl x:Class="MVVM_Bonus.View.LoginView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MVVM_Bonus"
+             xmlns:util="clr-namespace:MVVM_Bonus.Utilities"
              mc:Ignorable="d" Height="auto" Width="auto">
     <UserControl.Resources>
+        <util:NullToVisibilityConverter x:Key="NullToVis"/>
+
         <Storyboard x:Key="OnLoadAnimation">
             <DoubleAnimation Storyboard.TargetName="LoginCard" Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.8" />
             <DoubleAnimation Storyboard.TargetName="LoginCardTransform" Storyboard.TargetProperty="Y" From="40" To="0" Duration="0:0:0.8">
@@ -143,15 +146,37 @@
 
                 <TextBlock Text="Team Leader" Foreground="#8B7AAF" FontSize="12" Margin="0,0,0,10" FontWeight="SemiBold"/>
                 
-                <Grid Margin="0,0,0,40">
-                    <TextBox Style="{StaticResource LoginTextBox}" 
-                             Text="{Binding TeamLeaderUserName, UpdateSourceTrigger=PropertyChanged}"/>
+                <Grid Margin="0,0,0,12">
+                    <TextBox x:Name="UserNameBox"
+                             Style="{StaticResource LoginTextBox}" 
+                             Text="{Binding TeamLeaderUserName, UpdateSourceTrigger=PropertyChanged}">
+                        <TextBox.InputBindings>
+                            <!-- Sign in on Enter: this field is the only thing on the screen. -->
+                            <KeyBinding Key="Return" Command="{Binding LoginCommand}"/>
+                        </TextBox.InputBindings>
+                        <TextBox.Style>
+                            <Style TargetType="TextBox" BasedOn="{StaticResource LoginTextBox}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding HasError}" Value="True">
+                                        <Setter Property="BorderBrush" Value="#F44336"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBox.Style>
+                    </TextBox>
                     <!-- Turquoise Dot Icon -->
                     <TextBlock Text="●" Foreground="#00B8A9" FontSize="18" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,-2,0,0" IsHitTestVisible="False"/>
                 </Grid>
 
+                <!-- Inline failure text. A modal box for a misspelled name interrupts more
+                     than it helps, and hides the field the user needs to correct. -->
+                <TextBlock Text="{Binding ErrorMessage}"
+                           Visibility="{Binding ErrorMessage, Converter={StaticResource NullToVis}}"
+                           Foreground="#FF8A80" FontSize="12" TextWrapping="Wrap"
+                           LineHeight="17" Margin="2,0,2,20"/>
+
                 <Button Content="Sign In" Height="48" Style="{StaticResource LoginButton}" 
-                        Command="{Binding LoginCommand}"/>
+                        Command="{Binding LoginCommand}" Margin="0,16,0,0"/>
             </StackPanel>
         </Border>
 

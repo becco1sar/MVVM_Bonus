@@ -1,4 +1,4 @@
-using GalaSoft.MvvmLight.Messaging;
+﻿using GalaSoft.MvvmLight.Messaging;
 using MVVM_Bonus.Model;
 using MVVM_Bonus.Services;
 using System;
@@ -481,7 +481,7 @@ namespace MVVM_Bonus.ViewModel
 		public BonusViewModel()
 		{
 			_databaseService = new DataBaseService();
-			Messenger.Default.Register<Person>(this, "GetView", callback => _generateListOfBonus(callback));
+			Messenger.Default.Register<Person>(this, Constants.MESSENGER_GET_VIEW, callback => _generateListOfBonus(callback));
 		}
 		#endregion
 
