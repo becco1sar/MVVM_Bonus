@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -33,7 +33,7 @@ namespace MVVM_Bonus.Services
                 Margin = new Thickness(0, 0, 0, 4)
             });
 
-            doc.Blocks.Add(new Paragraph(new Run("Bonus Details and Print Preview"))
+            doc.Blocks.Add(new Paragraph(new Run("Prime de qualité / Quality bonus"))
             {
                 FontSize = 11,
                 Foreground = Brushes.Gray,
@@ -87,8 +87,13 @@ namespace MVVM_Bonus.Services
                 if (bonusModel.Amounts[i] == 0 && string.IsNullOrWhiteSpace(bonusModel.Comments[i]))
                     continue;
 
+                string label = i < bonusModel.ItemLabels.Count
+                               && !string.IsNullOrWhiteSpace(bonusModel.ItemLabels[i])
+                    ? bonusModel.ItemLabels[i].Trim()
+                    : $"Point {i + 1}";
+
                 TableRow bodyRow = new TableRow();
-                bodyRow.Cells.Add(CreateCell($"Item #{i + 1}"));
+                bodyRow.Cells.Add(CreateCell(label));
                 bodyRow.Cells.Add(CreateCell(bonusModel.Comments[i]));
                 bodyRow.Cells.Add(CreateCell($"{bonusModel.Amounts[i]:0.00} €", false, TextAlignment.Center));
                 bodyGroup.Rows.Add(bodyRow);

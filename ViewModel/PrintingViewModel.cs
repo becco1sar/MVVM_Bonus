@@ -48,7 +48,9 @@ namespace MVVM_Bonus.ViewModel
         private void SavePerson(Person person)
         {
             ConceredPerson = person;
-            ListDetailPoints = DetailPoints.GenerateDetailPoints(@$"O:\Sécurisation\Département Affichage\Controle Adshel 2m²\PRIME DE QUALITE\BETA 2.0{ConceredPerson.PathToContentCells}");
+            ListDetailPoints = DetailPoints.GenerateDetailPoints(
+                Constants.CONTENT_CELL_ROOT + ConceredPerson.PathToContentCells)
+                ?? new ObservableCollection<string>();
         }
 
         public BonusModel MyBonusPoints 

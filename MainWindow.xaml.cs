@@ -1,5 +1,4 @@
-using System.Windows;
-using System.Windows.Input;
+﻿using System.Windows;
 using MVVM_Bonus.ViewModel;
 
 namespace MVVM_Bonus
@@ -10,14 +9,21 @@ namespace MVVM_Bonus
         {
             InitializeComponent();
             DataContext = new MainViewModel();
+
+            StateChanged += MainWindow_StateChanged;
         }
 
-        private void TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        /// <summary>
+        /// Keeps the maximise button's glyph honest. It used to show the same square
+        /// whether the window was maximised or not, so the only way to tell what the
+        /// button would do was to press it.
+        /// </summary>
+        private void MainWindow_StateChanged(object sender, System.EventArgs e)
         {
-            if (e.LeftButton == MouseButtonState.Pressed)
-            {
-                DragMove();
-            }
+            bool isMaximized = WindowState == WindowState.Maximized;
+
+            MaximizeButton.Tag = FindResource(isMaximized ? "GlyphRestore" : "GlyphMaximize");
+            MaximizeButton.ToolTip = isMaximized ? "Restore" : "Maximise";
         }
 
         private void MinimizeButton_Click(object sender, RoutedEventArgs e)
@@ -27,14 +33,9 @@ namespace MVVM_Bonus
 
         private void MaximizeButton_Click(object sender, RoutedEventArgs e)
         {
-            if (WindowState == WindowState.Maximized)
-            {
-                WindowState = WindowState.Normal;
-            }
-            else
-            {
-                WindowState = WindowState.Maximized;
-            }
+            WindowState = WindowState == WindowState.Maximized
+                ? WindowState.Normal
+                : WindowState.Maximized;
         }
 
         private void CloseButton_Click(object sender, RoutedEventArgs e)

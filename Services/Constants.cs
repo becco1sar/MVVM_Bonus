@@ -20,6 +20,14 @@ namespace MVVM_Bonus.Services
 
         public static string SQL_CONNECTION_STRING => $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={GetDatabaseFilePath()};";
 
+        /// <summary>
+        /// Folder holding the evaluation-point text files, one subfolder per role and
+        /// language (Workers.Path via the Contentcell table). This path was pasted
+        /// inline in three view models, so moving the share meant finding all three.
+        /// </summary>
+        public const string CONTENT_CELL_ROOT =
+            @"O:\Sécurisation\Département Affichage\Controle Adshel 2m²\PRIME DE QUALITE\BETA 2.0";
+
         // ---- Navigation route tokens ----------------------------------------
         // These values are also the Mediator tokens. Keep the literal strings
         // unchanged: older call sites used them inline.

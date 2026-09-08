@@ -12,6 +12,7 @@ namespace MVVM_Bonus.Model
         private string _period; 
         private List<decimal> _amounts;
         private List<string> _comments;
+        private List<string> _itemLabels;
         #endregion
 
         #region Properties
@@ -65,6 +66,26 @@ namespace MVVM_Bonus.Model
                 OnPropertyChanged(nameof(Amounts));
             }
         }
+        /// <summary>
+        /// Text of each evaluation point, positionally matching <see cref="Amounts"/>.
+        /// Without this the printed sheet an employee signs listed its rows as
+        /// "Item #1" to "Item #10", because only the amounts were ever carried.
+        /// </summary>
+        public List<string> ItemLabels
+        {
+            get
+            {
+                if (_itemLabels == null)
+                    _itemLabels = new List<string>();
+                return _itemLabels;
+            }
+            set
+            {
+                _itemLabels = value;
+                OnPropertyChanged(nameof(ItemLabels));
+            }
+        }
+
         public List<string> Comments 
         {
             get

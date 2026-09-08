@@ -31,6 +31,7 @@ namespace MVVM_Bonus.ViewModel
 		private ICommand _btnPrintPreviewCommand;
 		private ICommand _btnCloseDetailPanelCommand;
 		private bool _isDetailPanelOpen;
+		private string _detailWarning;
 		#endregion
 
 		#region Properties
@@ -88,6 +89,7 @@ namespace MVVM_Bonus.ViewModel
 			{
 				_selectedBonusModel = value;
 				OnPropertyChanged(nameof(SelectedBonusModel));
+				OnPropertyChanged(nameof(HasSelection));
 
 				if (_selectedBonusModel != null)
 				{
@@ -155,6 +157,32 @@ namespace MVVM_Bonus.ViewModel
 				OnPropertyChanged(nameof(MyBonusDetails));
 			}
 		}
+
+		public bool HasSelection => SelectedBonusModel != null;
+
+		/// <summary>True when this employee has no bonuses recorded at all.</summary>
+		public bool HasNoHistory => ListBonusModels.Count == 0;
+
+		/// <summary>True when a search is active but matches no period.</summary>
+		public bool HasNoSearchResults =>
+			ListBonusModels.Count > 0 && FilteredListBonusModels.Count == 0;
+
+		/// <summary>
+		/// Set when the evaluation point text for this employee's role and language
+		/// cannot be read, so the detail rows would otherwise be silently empty.
+		/// </summary>
+		public string DetailWarning
+		{
+			get => _detailWarning;
+			private set
+			{
+				_detailWarning = value;
+				OnPropertyChanged(nameof(DetailWarning));
+				OnPropertyChanged(nameof(HasDetailWarning));
+			}
+		}
+
+		public bool HasDetailWarning => !string.IsNullOrWhiteSpace(DetailWarning);
 
 		public bool IsDetailPanelOpen
 		{
@@ -432,34 +460,6 @@ namespace MVVM_Bonus.ViewModel
 				Padding = new Thickness(0, 30, 0, 0)
 			};
 		}
-		public ICommand BtnPrintPreviewCommand
-		{
-			get
-			{
-				if (_btnPrintPreviewCommand == null)
-				{
-					_btnPrintPreviewCommand = new RelayCommand(param =>
-					{
-						if (SelectedBonusModel != null && param is Grid printArea)
-						{
-							try
-							{
-								// Show print preview window
-								//PrintPreviewWindow previewWindow = new PrintPreviewWindow();
-								//previewWindow.DataContext = this;
-								//previewWindow.ShowDialog();
-							}
-							catch (Exception ex)
-							{
-								MessageBox.Show($"Preview error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-							}
-						}
-					});
-				}
-				return _btnPrintPreviewCommand;
-			}
-		}
-
 		public ICommand BtnCloseDetailPanelCommand
 		{
 			get
@@ -508,14 +508,19 @@ namespace MVVM_Bonus.ViewModel
 			if (string.IsNullOrEmpty(dt))
 			{
 				FilteredListBonusModels = new ObservableCollection<BonusModel>(ListBonusModels);
-				return;
+			}
+			else
+			{
+				var filteredItems = ListBonusModels
+						.Where(x => x.Period != null
+									&& x.Period.Contains(dt, StringComparison.OrdinalIgnoreCase))
+						.ToList();
+
+				FilteredListBonusModels = new ObservableCollection<BonusModel>(filteredItems);
 			}
 
-			var filteredItems = ListBonusModels
-					.Where(x => x.Period.Contains(dt, StringComparison.OrdinalIgnoreCase))
-					.ToList();
-
-			FilteredListBonusModels = new ObservableCollection<BonusModel>(filteredItems);
+			OnPropertyChanged(nameof(HasNoHistory));
+			OnPropertyChanged(nameof(HasNoSearchResults));
 		}
 
 		/// <summary>
@@ -560,10 +565,17 @@ namespace MVVM_Bonus.ViewModel
 				}
 
 				FilteredListBonusModels = new ObservableCollection<BonusModel>(ListBonusModels);
+
+				OnPropertyChanged(nameof(HasNoHistory));
+				OnPropertyChanged(nameof(HasNoSearchResults));
 			}
 			catch (Exception ex)
 			{
-				MessageBox.Show($"Error loading bonus data: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+				MessageBox.Show(
+					$"Could not load the bonus history.\n\n{ex.Message}",
+					"Connection problem",
+					MessageBoxButton.OK,
+					MessageBoxImage.Error);
 			}
 		}
 
@@ -575,27 +587,38 @@ namespace MVVM_Bonus.ViewModel
 			try
 			{
 				MyBonusDetails.Clear();
+				DetailWarning = null;
 
-				if (bonusModel.Amounts.Count > 0 && bonusModel.Comments.Count > 0)
+				if (bonusModel.Amounts.Count == 0)
+					return;
+
+				ObservableCollection<string> detailPoints = DetailPoints.GenerateDetailPoints(
+						Constants.CONTENT_CELL_ROOT + CurrentPerson.PathToContentCells);
+
+				if (detailPoints == null)
 				{
-					ObservableCollection<string> detailPoints = DetailPoints.GenerateDetailPoints(
-							@$"O:\Sécurisation\Département Affichage\Controle Adshel 2m²\PRIME DE QUALITE\BETA 2.0{CurrentPerson.PathToContentCells}"
-					);
+					// Falling back to numbered points beats an empty panel: the amounts
+					// are still worth reading even when the wording cannot be found.
+					DetailWarning = "The wording of the evaluation points could not be read for this "
+									+ "employee's role and language, so the rows below are numbered instead.";
 
-					for (int i = 0; i < detailPoints.Count && i < bonusModel.Amounts.Count; i++)
+					detailPoints = new ObservableCollection<string>(
+						Enumerable.Range(1, bonusModel.Amounts.Count).Select(n => $"Point {n}"));
+				}
+
+				for (int i = 0; i < detailPoints.Count && i < bonusModel.Amounts.Count; i++)
+				{
+					MyBonusDetails.Add(new BonusDetailModel
 					{
-						MyBonusDetails.Add(new BonusDetailModel
-						{
-							DetailPoint = detailPoints[i],
-							Amount = bonusModel.Amounts[i],
-							Comment = bonusModel.Comments[i]
-						});
-					}
+						DetailPoint = detailPoints[i],
+						Amount = bonusModel.Amounts[i],
+						Comment = i < bonusModel.Comments.Count ? bonusModel.Comments[i] : string.Empty
+					});
 				}
 			}
 			catch (Exception ex)
 			{
-				MessageBox.Show($"Error loading bonus details: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+				DetailWarning = $"Could not load the bonus details: {ex.Message}";
 			}
 		}
 

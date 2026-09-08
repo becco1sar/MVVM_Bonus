@@ -941,8 +941,10 @@
         </Setter>
     </Style>
 
-    <!-- Amount entry: right-aligned with aligned figures. -->
-    <Style x:Key="AmountTextBox" TargetType="TextBox">
+    <!-- Amount entry: right-aligned with aligned figures. BasedOn is required, not
+         cosmetic: a keyed style does not inherit the implicit one, so without it these
+         boxes would fall back to the stock white Windows TextBox. -->
+    <Style x:Key="AmountTextBox" TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
         <Setter Property="TextAlignment" Value="Right"/>
         <Setter Property="FontWeight" Value="SemiBold"/>
         <Setter Property="Typography.NumeralAlignment" Value="Tabular"/>
