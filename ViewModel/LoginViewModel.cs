@@ -1,10 +1,8 @@
-﻿using GalaSoft.MvvmLight.Messaging;
-using MVVM_Bonus.Logic;
+using GalaSoft.MvvmLight.Messaging;
 using MVVM_Bonus.Services;
 using System;
 using System.Data.OleDb;
 using System.Windows;
-using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 
 
@@ -27,7 +25,14 @@ namespace MVVM_Bonus.ViewModel
             {
                 if (IsTeamLeaderInDatabase(TeamLeaderUserName))
                 {
-                    Mediator.Notify(Constants.MAIN_MENU_VIEW, "");
+                    if (SelectedTeamLeader.Role != null && SelectedTeamLeader.Role.ToUpper() == "HR")
+                    {
+                        Mediator.Notify(Constants.HR_DASHBOARD_VIEW, "");
+                    }
+                    else
+                    {
+                        Mediator.Notify(Constants.MAIN_MENU_VIEW, "");
+                    }
                     Messenger.Default.Send(SelectedTeamLeader, Constants.MESSENGER_TEAMLEADER_IDENTIFICATION);
                 }
                 else
@@ -38,61 +43,46 @@ namespace MVVM_Bonus.ViewModel
         }
         public string TeamLeaderUserName
         {
-            get
-            {
-                return _teamLeaderUserName;
-            }
+            get => _teamLeaderUserName;
             set
             {
                 _teamLeaderUserName = value;
-                OnPropertyChanged(TeamLeaderUserName);
+                OnPropertyChanged();
             }
         }
         public TeamLeaderModel SelectedTeamLeader
         {
-            get
-            {
-                return _selectedTeamLeader;
-            }
+            get => _selectedTeamLeader;
             set
             {
                 _selectedTeamLeader = value;
-                OnPropertyChanged(nameof(SelectedTeamLeader));
+                OnPropertyChanged();
             }
         }
         private bool IsTeamLeaderInDatabase(string name)
         {
             try
             {
-                var reader = _databaseService.GetCommand($"{Constants.SQL_GET_TEAMLEADER_QUERY} = '{name}'");
-                if (reader.HasRows)
+                var table = _databaseService.ExecuteQuery(Constants.SQL_GET_TEAMLEADER_QUERY, name);
+                if (table.Rows.Count > 0)
                 {
-                    var teamLeaderId = reader.GetOrdinal(Constants.SQL_ID_COLUMN_NAME);
-                    var teamLeaderName = reader.GetOrdinal(Constants.SQL_NAME_COLUMN_NAME);
-                    while (reader.Read())
+                    var row = table.Rows[0];
+                    SelectedTeamLeader = new TeamLeaderModel()
                     {
-                        SelectedTeamLeader = new TeamLeaderModel()
-                        {
-                            Name = reader.GetString(teamLeaderName),
-                            Id = reader.GetInt32(teamLeaderId)
-                        };
-                    };       
+                        Name = Convert.ToString(row[Constants.SQL_NAME_COLUMN_NAME]),
+                        Id = Convert.ToInt32(row[Constants.SQL_ID_COLUMN_NAME]),
+                        Role = row.Table.Columns.Contains(Constants.SQL_ROLE_COLUMN_NAME) && row[Constants.SQL_ROLE_COLUMN_NAME] != DBNull.Value 
+                            ? Convert.ToString(row[Constants.SQL_ROLE_COLUMN_NAME]) 
+                            : string.Empty
+                    };
                     return true;
                 }
             }
-            catch (ArgumentNullException ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-            catch (OleDbException ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show($"Login error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
- 
+
             return false;
         }
     }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
 using System.Linq;
@@ -12,5 +12,6 @@ namespace MVVM_Bonus
     {
         public string Name { get; set; }        
         public int Id { get; set; }
+        public string Role { get; set; }
     }
 }

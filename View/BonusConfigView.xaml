@@ -1,0 +1,117 @@
+<UserControl x:Class="MVVM_Bonus.View.BonusConfigView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="1200">
+    <Grid Background="#1A1225">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Background="#221738" Padding="24,16">
+            <DockPanel LastChildFill="False">
+                <Button DockPanel.Dock="Left" Content="← Back to Dashboard" Style="{StaticResource TransformedButtonBorder}" Command="{Binding BackCommand}" Padding="15,8" FontSize="12">
+                    <Button.Background>
+                        <SolidColorBrush Color="#2A1D42"/>
+                    </Button.Background>
+                </Button>
+                <TextBlock DockPanel.Dock="Left" Text="Bonus Default Configuration" Foreground="#FFFFFF" FontSize="20" FontWeight="Bold" VerticalAlignment="Center" Margin="20,0,0,0"/>
+            </DockPanel>
+        </Border>
+
+        <Grid Grid.Row="1" Margin="24">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- LEFT: Profile List -->
+            <Border Grid.Column="0" Background="#2A1D42" CornerRadius="14" Padding="20" Margin="0,0,20,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    
+                    <TextBlock Grid.Row="0" Text="CONFIG PROFILES" Foreground="#00B8A9" FontSize="12" FontWeight="Bold" Margin="0,0,0,15"/>
+                    
+                    <ListBox Grid.Row="1" ItemsSource="{Binding BonusConfigs}" SelectedItem="{Binding SelectedConfig}" Background="Transparent" BorderThickness="0">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="#221738" CornerRadius="8" Padding="15" Margin="0,0,0,8">
+                                    <TextBlock Text="{Binding Id, StringFormat='Profile ID: {0}'}" Foreground="#FFFFFF" FontSize="16" FontWeight="Bold"/>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </Border>
+
+            <!-- RIGHT: Edit Form -->
+            <Border Grid.Column="1" Background="#2A1D42" CornerRadius="14" Padding="30">
+                <StackPanel>
+                    <TextBlock Text="EDIT BONUS MAXIMUM VALUES" Foreground="#00B8A9" FontSize="12" FontWeight="Bold" Margin="0,0,0,20"/>
+                    
+                    <WrapPanel Margin="0,0,0,20">
+                        <StackPanel Margin="0,0,20,15">
+                            <TextBlock Text="Value A" Foreground="#8B7AAF" FontSize="12" Margin="0,0,0,5"/>
+                            <TextBox Text="{Binding EditA}" Background="#221738" Foreground="White" BorderThickness="0" Padding="10" FontSize="16" Width="100"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,20,15">
+                            <TextBlock Text="Value B" Foreground="#8B7AAF" FontSize="12" Margin="0,0,0,5"/>
+                            <TextBox Text="{Binding EditB}" Background="#221738" Foreground="White" BorderThickness="0" Padding="10" FontSize="16" Width="100"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,20,15">
+                            <TextBlock Text="Value C" Foreground="#8B7AAF" FontSize="12" Margin="0,0,0,5"/>
+                            <TextBox Text="{Binding EditC}" Background="#221738" Foreground="White" BorderThickness="0" Padding="10" FontSize="16" Width="100"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,20,15">
+                            <TextBlock Text="Value D" Foreground="#8B7AAF" FontSize="12" Margin="0,0,0,5"/>
+                            <TextBox Text="{Binding EditD}" Background="#221738" Foreground="White" BorderThickness="0" Padding="10" FontSize="16" Width="100"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,20,15">
+                            <TextBlock Text="Value E" Foreground="#8B7AAF" FontSize="12" Margin="0,0,0,5"/>
+                            <TextBox Text="{Binding EditE}" Background="#221738" Foreground="White" BorderThickness="0" Padding="10" FontSize="16" Width="100"/>
+                        </StackPanel>
+                    </WrapPanel>
+                    
+                    <WrapPanel Margin="0,0,0,30">
+                        <StackPanel Margin="0,0,20,15">
+                            <TextBlock Text="Value F" Foreground="#8B7AAF" FontSize="12" Margin="0,0,0,5"/>
+                            <TextBox Text="{Binding EditF}" Background="#221738" Foreground="White" BorderThickness="0" Padding="10" FontSize="16" Width="100"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,20,15">
+                            <TextBlock Text="Value G" Foreground="#8B7AAF" FontSize="12" Margin="0,0,0,5"/>
+                            <TextBox Text="{Binding EditG}" Background="#221738" Foreground="White" BorderThickness="0" Padding="10" FontSize="16" Width="100"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,20,15">
+                            <TextBlock Text="Value H" Foreground="#8B7AAF" FontSize="12" Margin="0,0,0,5"/>
+                            <TextBox Text="{Binding EditH}" Background="#221738" Foreground="White" BorderThickness="0" Padding="10" FontSize="16" Width="100"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,20,15">
+                            <TextBlock Text="Value I" Foreground="#8B7AAF" FontSize="12" Margin="0,0,0,5"/>
+                            <TextBox Text="{Binding EditI}" Background="#221738" Foreground="White" BorderThickness="0" Padding="10" FontSize="16" Width="100"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,20,15">
+                            <TextBlock Text="Value J" Foreground="#8B7AAF" FontSize="12" Margin="0,0,0,5"/>
+                            <TextBox Text="{Binding EditJ}" Background="#221738" Foreground="White" BorderThickness="0" Padding="10" FontSize="16" Width="100"/>
+                        </StackPanel>
+                    </WrapPanel>
+
+                    <Button Content="💾 Save Configuration" Style="{StaticResource TransformedButtonBorder}" Command="{Binding SaveCommand}" Padding="20,15" FontSize="14" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left" Width="200">
+                        <Button.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#00B8A9" Offset="0"/>
+                                <GradientStop Color="#00D4AA" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Button.Background>
+                    </Button>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

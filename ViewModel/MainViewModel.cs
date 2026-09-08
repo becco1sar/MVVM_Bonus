@@ -1,4 +1,4 @@
-﻿using MVVM_Bonus.ViewModel;
+using MVVM_Bonus.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +14,7 @@ namespace MVVM_Bonus.ViewModel
         #region Fields
         IPageViewModel _currentPageViewModel;
         List<IPageViewModel> _listPageViewModel;
-        string teamLeaderName;
+        TeamLeaderModel _teamLeader;
         #endregion
         #region Properties
 
@@ -40,22 +40,24 @@ namespace MVVM_Bonus.ViewModel
             }
         }
 
-        public string TeamLeaderName { get => teamLeaderName; set => teamLeaderName = value; }
+        public TeamLeaderModel TeamLeader { get => _teamLeader; set => _teamLeader = value; }
         #endregion
         #region Constructors
         public MainViewModel()
         {
+            Messenger.Default.Register<TeamLeaderModel>(this, Constants.MESSENGER_TEAMLEADER_IDENTIFICATION, x => TeamLeader = x);
             ListPageViewModel.Add(new LoginViewModel());
             ListPageViewModel.Add(new MainMenuViewModel());
             ListPageViewModel.Add(new BonusViewModel());
             ListPageViewModel.Add(new InsertViewModel());
-            ListPageViewModel.Add(new InsertViewVeloViewModel());
             ListPageViewModel.Add(new PrintingViewModel());
+            ListPageViewModel.Add(new HrDashboardViewModel());
 
             CurrentPageViewModel = ListPageViewModel[0];
 
             Mediator.Subscribe("LoginView", LogOut);
             Mediator.Subscribe(Constants.MAIN_MENU_VIEW, ShowGeneral);
+            Mediator.Subscribe(Constants.HR_DASHBOARD_VIEW, ShowHrDashboard);
             Mediator.Subscribe("GetPersonsBonusView", ShowBonus);
             Mediator.Subscribe("InsertPersonsBonusView", ShowInsertBonus);
             Mediator.Subscribe("GoToPrintingView", ShowPrinting);
@@ -66,14 +68,11 @@ namespace MVVM_Bonus.ViewModel
         #region Methods
         private void ShowPrinting(object obj)
         {
-            ChangeViewModel(ListPageViewModel[5]);
+            ChangeViewModel(ListPageViewModel[4]);
         }
 
         private void ShowInsertBonus(object obj)
         {
-            //if(TeamLeaderName.ToLower() == "semuna")
-            //    ChangeViewModel(ListPageViewModel[4]);
-            //else
             ChangeViewModel(ListPageViewModel[3]);
         }
 
@@ -90,6 +89,11 @@ namespace MVVM_Bonus.ViewModel
         private void ShowGeneral(object obj)
         {
             ChangeViewModel(_listPageViewModel[1]);
+        }
+
+        private void ShowHrDashboard(object obj)
+        {
+            ChangeViewModel(_listPageViewModel[5]);
         }
 
         private void ChangeViewModel(IPageViewModel pageViewModel)

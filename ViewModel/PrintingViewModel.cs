@@ -1,4 +1,4 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+using GalaSoft.MvvmLight.Messaging;
 using MVVM_Bonus.Model;
 using System;
 using System.Collections.ObjectModel;
@@ -48,7 +48,7 @@ namespace MVVM_Bonus.ViewModel
         private void SavePerson(Person person)
         {
             ConceredPerson = person;
-            ListDetailPoints = DetailPoints.GenerateDetailPoints(@$"O:\Sécurisation\Département Affichage\Controle Adshel 2m²\PRIME DE QUALITE\BETA 2.0{ConceredPerson.P_PathToContentCells}");
+            ListDetailPoints = DetailPoints.GenerateDetailPoints(@$"O:\Sécurisation\Département Affichage\Controle Adshel 2m²\PRIME DE QUALITE\BETA 2.0{ConceredPerson.PathToContentCells}");
         }
 
         public BonusModel MyBonusPoints 
@@ -150,14 +150,10 @@ namespace MVVM_Bonus.ViewModel
         public ICommand BtnBackButton 
         {
             get
-            {
-
-             
+            {             
                 return _btnBackButton = CommonViewModel.Return; 
             }
         }
-
-
         private void Goto(string v)
         {
         
@@ -182,7 +178,7 @@ namespace MVVM_Bonus.ViewModel
         {
             PrintDialog pd = new();
             Grid g = (Grid)x;
-
+            pd.PrintTicket.PageOrientation = System.Printing.PageOrientation.Portrait;
             pd.PrintVisual(g, "Printing");            
         }
 

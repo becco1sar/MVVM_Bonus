@@ -1,117 +1,65 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System;
 using MVVM_Bonus.Services;
 
 namespace MVVM_Bonus.Model
 {
     public class Person : ObservableObject
     {
-        private string p_Name;
-        private string p_Language;
-        private string p_Role;
-        private string p_ContractID;
-        private int p_BVID;
-        private int p_Id;
-        private int p_TeamLeaderID;
-        private string p_PathToContentCells;
-        public string P_Name 
+        private string _name;
+        private string _language;
+        private string _role;
+        private string _contract;
+        private int _bvId;
+        private int _id;
+        private int _teamLeaderId;
+        private string _pathToContentCells;
+
+        public string Name 
         {
-            get
-            {
-                return p_Name;
-            }
-            set
-            {
-                p_Name = value;
-                OnPropertyChanged(nameof(P_Name));
-            }
+            get => _name;
+            set { _name = value; OnPropertyChanged(); }
         }
-        public string P_Role
+
+        public string Role
         {
-            get
-            {
-                return p_Role;
-            }
-            set
-            {
-                p_Role = value;
-                OnPropertyChanged(nameof(p_Role));
-            }
+            get => _role;
+            set { _role = value; OnPropertyChanged(); }
         }
-        public string P_Contract
+
+        public string Contract
         {
-            get
-            {
-                return p_ContractID;
-            }
-            set
-            {
-                p_ContractID = value;
-                OnPropertyChanged(nameof(P_Contract));
-            }
+            get => _contract;
+            set { _contract = value; OnPropertyChanged(); }
         }
-        public int P_TeamLeaderID
+
+        public int TeamLeaderId
         {
-            get
-            {
-                return p_TeamLeaderID;
-            }
-            set
-            {
-                p_TeamLeaderID = value;
-                OnPropertyChanged(nameof(p_TeamLeaderID));
-            }
+            get => _teamLeaderId;
+            set { _teamLeaderId = value; OnPropertyChanged(); }
         }
-        public int P_Id
+
+        public int Id
         {
-            get
-            {
-                return p_Id;
-            }
-            set
-            {
-                p_Id = value;
-                OnPropertyChanged(nameof(P_Id));
-            }
+            get => _id;
+            set { _id = value; OnPropertyChanged(); }
         }
-        public int P_BVID 
+
+        public int BvId 
         {
-            get
-            {
-                return p_BVID;
-            }
-            set
-            {
-                p_BVID = value;
-                OnPropertyChanged(nameof(P_BVID));
-            } 
+            get => _bvId;
+            set { _bvId = value; OnPropertyChanged(); }
         }
-        public string P_Language 
+
+        public string Language 
         {
-            get
-            {
-                return p_Language;
-            }
-            set
-            {
-                p_Language = value;
-                OnPropertyChanged(nameof(P_Language));
-            }
+            get => _language;
+            set { _language = value; OnPropertyChanged(); }
         }
-        public string P_PathToContentCells 
+
+        public string PathToContentCells 
         {
-            get
-            {
-                return p_PathToContentCells;
-            }
-            set
-            {
-                p_PathToContentCells = value;
-                OnPropertyChanged(nameof(P_PathToContentCells));
-            } 
+            get => _pathToContentCells;
+            set { _pathToContentCells = value; OnPropertyChanged(); }
         }
     }
 }

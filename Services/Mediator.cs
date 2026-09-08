@@ -1,45 +1,66 @@
-﻿using System;
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MVVM_Bonus.Services
 {
-    public class Mediator
+    public static class Mediator
     {
-        static IDictionary<string, List<Action<object>>> pl_Dict = new Dictionary<string, List<Action<object>>>();
+        private static readonly ConcurrentDictionary<string, List<Action<object>>> _subscribers 
+            = new ConcurrentDictionary<string, List<Action<object>>>(StringComparer.OrdinalIgnoreCase);
 
         public static void Subscribe(string token, Action<object> callback)
         {
-            if (!pl_Dict.ContainsKey(token))
-            {
-                List<Action<object>> list = new List<Action<object>>();
-                list.Add(callback);
-                pl_Dict.Add(token, list);
-            }
-            else
-            {
-                bool found = false;
-                foreach (var item in pl_Dict[token])
-                    if (item.Method.ToString() == callback.Method.ToString())
-                        found = true;
-                if (!found)
-                    pl_Dict[token].Add(callback);
-            }
+            if (string.IsNullOrWhiteSpace(token) || callback == null)
+                return;
+
+            _subscribers.AddOrUpdate(
+                token,
+                new List<Action<object>> { callback },
+                (key, existingList) =>
+                {
+                    lock (existingList)
+                    {
+                        if (!existingList.Contains(callback))
+                        {
+                            existingList.Add(callback);
+                        }
+                    }
+                    return existingList;
+                });
         }
+
         public static void UnSubscribe(string token, Action<object> callback)
         {
-            if (pl_Dict.ContainsKey(token))
-                pl_Dict[token].Remove(callback);
-        }
-        public static void Notify(string token, string args = null)
-        {
-            if (pl_Dict.ContainsKey(token))
-            {
-                foreach (var callback in pl_Dict[token])
-                    callback(args);
+            if (string.IsNullOrWhiteSpace(token) || callback == null)
+                return;
 
+            if (_subscribers.TryGetValue(token, out var list))
+            {
+                lock (list)
+                {
+                    list.Remove(callback);
+                }
+            }
+        }
+
+        public static void Notify(string token, object args = null)
+        {
+            if (string.IsNullOrWhiteSpace(token))
+                return;
+
+            if (_subscribers.TryGetValue(token, out var list))
+            {
+                List<Action<object>> callbacksCopy;
+                lock (list)
+                {
+                    callbacksCopy = new List<Action<object>>(list);
+                }
+
+                foreach (var callback in callbacksCopy)
+                {
+                    callback?.Invoke(args);
+                }
             }
         }
     }

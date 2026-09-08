@@ -1,19 +1,162 @@
-﻿<UserControl x:Class="MVVM_Bonus.View.LoginView"
+<UserControl x:Class="MVVM_Bonus.View.LoginView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MVVM_Bonus"
-             mc:Ignorable="d" Height="139" Width="304" >
-    <StackPanel Margin="5">
-        <DockPanel>
-            <Label Foreground="white" Content="👤:"  Margin="5"/>
+             mc:Ignorable="d" Height="auto" Width="auto">
+    <UserControl.Resources>
+        <Storyboard x:Key="OnLoadAnimation">
+            <DoubleAnimation Storyboard.TargetName="LoginCard" Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.8" />
+            <DoubleAnimation Storyboard.TargetName="LoginCardTransform" Storyboard.TargetProperty="Y" From="40" To="0" Duration="0:0:0.8">
+                <DoubleAnimation.EasingFunction>
+                    <CubicEase EasingMode="EaseOut" />
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
 
-            <TextBox  Margin="5"  Text="{Binding TeamLeaderUserName, UpdateSourceTrigger=PropertyChanged}"/>
-        </DockPanel>
-       
-      
-        <Button Content="Login" Command="{Binding LoginCommand}" Style="{StaticResource TransformedButtonBorder}"/>
-    </StackPanel>
+        <Style x:Key="LoginTextBox" TargetType="TextBox">
+            <Setter Property="Background" Value="#221738"/>
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="BorderThickness" Value="0,0,0,2"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="35,12,10,12"/>
+            <Setter Property="CaretBrush" Value="#00B8A9"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="10">
+                            <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="#281B43"/>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="#00B8A9"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="LoginButton" TargetType="Button">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" CornerRadius="10" RenderTransformOrigin="0.5,0.5">
+                            <Border.RenderTransform>
+                                <ScaleTransform x:Name="Scale"/>
+                            </Border.RenderTransform>
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                    <GradientStop Color="#00B8A9" Offset="0"/>
+                                    <GradientStop Color="#00D4AA" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter TargetName="border" Property="Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                            <GradientStop Color="#0AC2B3" Offset="0"/>
+                                            <GradientStop Color="#0ADEB4" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="Scale" Storyboard.TargetProperty="ScaleX" To="1.02" Duration="0:0:0.1"/>
+                                            <DoubleAnimation Storyboard.TargetName="Scale" Storyboard.TargetProperty="ScaleY" To="1.02" Duration="0:0:0.1"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="Scale" Storyboard.TargetProperty="ScaleX" To="1.0" Duration="0:0:0.1"/>
+                                            <DoubleAnimation Storyboard.TargetName="Scale" Storyboard.TargetProperty="ScaleY" To="1.0" Duration="0:0:0.1"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="Scale" Storyboard.TargetProperty="ScaleX" To="0.98" Duration="0:0:0.1"/>
+                                            <DoubleAnimation Storyboard.TargetName="Scale" Storyboard.TargetProperty="ScaleY" To="0.98" Duration="0:0:0.1"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <UserControl.Triggers>
+        <EventTrigger RoutedEvent="UserControl.Loaded">
+            <BeginStoryboard Storyboard="{StaticResource OnLoadAnimation}" />
+        </EventTrigger>
+    </UserControl.Triggers>
+
+    <Grid>
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                <GradientStop Color="#1A1225" Offset="0"/>
+                <GradientStop Color="#221738" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <Border x:Name="LoginCard" MaxWidth="420" VerticalAlignment="Center" HorizontalAlignment="Center" 
+                Background="#2A1D42" CornerRadius="16" BorderBrush="#3D2B5C" BorderThickness="1"
+                Opacity="0" MinWidth="360">
+            
+            <Border.RenderTransform>
+                <TranslateTransform x:Name="LoginCardTransform" Y="40" />
+            </Border.RenderTransform>
+
+            <Border.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="40" Opacity="0.5" Direction="270" ShadowDepth="12" />
+            </Border.Effect>
+
+            <StackPanel Margin="40,50,40,50">
+                <TextBlock Text="B A U E R   M E D I A   O U T D O O R" Foreground="#00B8A9" FontSize="11" 
+                           FontWeight="SemiBold" HorizontalAlignment="Center" 
+                           Margin="0,0,0,8" />
+                <TextBlock Text="Quality Bonus" Foreground="#FFFFFF" FontSize="28" 
+                           FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,15" />
+                
+                <Border Height="2" Width="60" Background="#00B8A9" HorizontalAlignment="Center" Margin="0,0,0,45" CornerRadius="1" />
+
+                <TextBlock Text="Team Leader" Foreground="#8B7AAF" FontSize="12" Margin="0,0,0,10" FontWeight="SemiBold"/>
+                
+                <Grid Margin="0,0,0,40">
+                    <TextBox Style="{StaticResource LoginTextBox}" 
+                             Text="{Binding TeamLeaderUserName, UpdateSourceTrigger=PropertyChanged}"/>
+                    <!-- Turquoise Dot Icon -->
+                    <TextBlock Text="●" Foreground="#00B8A9" FontSize="18" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,-2,0,0" IsHitTestVisible="False"/>
+                </Grid>
+
+                <Button Content="Sign In" Height="48" Style="{StaticResource LoginButton}" 
+                        Command="{Binding LoginCommand}"/>
+            </StackPanel>
+        </Border>
+
+        <TextBlock Text="v2.0 · Bauer Media Outdoor" Foreground="#8B7AAF" 
+                   VerticalAlignment="Bottom" HorizontalAlignment="Center" 
+                   Margin="0,0,0,25" FontSize="11" />
+    </Grid>
 </UserControl>
- 

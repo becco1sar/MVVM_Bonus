@@ -1,5 +1,6 @@
-﻿using GalaSoft.MvvmLight.Messaging;
+using GalaSoft.MvvmLight.Messaging;
 using System.Collections.Generic;
+using System.Data;
 using System.Windows;
 using MVVM_Bonus.ViewModel;
 using MVVM_Bonus.Model;
@@ -25,30 +26,24 @@ namespace MVVM_Bonus.ViewModel
         #region Properties
         public string Search
         {
-            get
-            {
-                if (_search != null)
-                    FilteredSearch(_search);
-                else
-                    ShowAll();
-                return _search;
-            }
+            get => _search;
             set
             {
-                _search = value;
-                OnPropertyChanged(nameof(Search));
+                if (_search != value)
+                {
+                    _search = value;
+                    OnPropertyChanged();
+                    ApplyFilter(_search);
+                }
             }
         }
         public Person SelectedWorker
         {
-            get
-            {
-                return _selectedWorker;
-            }
+            get => _selectedWorker;
             set
             {
                 _selectedWorker = value;
-                OnPropertyChanged(nameof(SelectedWorker));
+                OnPropertyChanged();
             }
         }
         public ObservableCollection<Person> ListPersons
@@ -62,7 +57,7 @@ namespace MVVM_Bonus.ViewModel
             set
             {
                 _listPersons = value;
-                OnPropertyChanged(nameof(ListPersons));
+                OnPropertyChanged();
             }
         }
         public ObservableCollection<Person> FilteredListPerson
@@ -70,13 +65,13 @@ namespace MVVM_Bonus.ViewModel
             get
             {
                 if (_filteredListPerson == null)
-                    _filteredListPerson = new();
+                    _filteredListPerson = new ObservableCollection<Person>();
                 return _filteredListPerson;
             }
             set
             {
                 _filteredListPerson = value;
-                OnPropertyChanged(nameof(FilteredListPerson));
+                OnPropertyChanged();
             }
         }
         public ICommand GetPersonsBonus
@@ -110,7 +105,7 @@ namespace MVVM_Bonus.ViewModel
                         MessageBox.Show("Please select a worker first !");
                         return;
                     }
-                    Mediator.Notify("InsertPersonsBonusView", "");
+                    Mediator.Notify("InsertPersonsBonusView", SelectedWorker);
                     Messenger.Default.Send(SelectedWorker, "InsertView");
                 }));
             }
@@ -125,64 +120,71 @@ namespace MVVM_Bonus.ViewModel
         }
         #endregion
         #region Methods
-        private void FilteredSearch(string search)
+        private void ApplyFilter(string search)
         {
-            FilteredListPerson = ListPersons;
-            if (ListPersons.Where(x => x.P_Name.Contains(search.ToUpper())).Count() != 0)
+            if (string.IsNullOrWhiteSpace(search))
             {
-                FilteredListPerson = new ObservableCollection<Person>();
-                foreach (var person in ListPersons.Where(x => x.P_Name.Contains(search.ToUpper())))
-                    FilteredListPerson.Add(person);
+                FilteredListPerson = new ObservableCollection<Person>(ListPersons);
+            }
+            else
+            {
+                var matches = ListPersons
+                    .Where(x => x.Name != null && x.Name.Contains(search, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+                FilteredListPerson = new ObservableCollection<Person>(matches);
             }
         }
+
         private void ShowAll()
         {
-            FilteredListPerson = ListPersons;
+            ApplyFilter(null);
         }
         private void GenerateWorkers(TeamLeaderModel tl)
         {
-            var teamLeaderId = tl.Id;
-            //TODO Try except if null it exexucutes
-            var reader = _databaseService.GetCommand($"{Constants.SQL_GET_WORKER_QUERY} = {teamLeaderId} AND Active = '{Constants.ACTIVE_ROWS}'");
-            if (reader.HasRows)
+            if (tl == null) return;
+            try
             {
-                int id = reader.GetOrdinal(Constants.SQL_ID_COLUMN_NAME);
-                int name = reader.GetOrdinal(Constants.SQL_NAME_COLUMN_NAME);
-                int lang = reader.GetOrdinal(Constants.SQL_LANGUAGE_COLUMN_NAME);
-                int role = reader.GetOrdinal(Constants.SQL_ROLE_COLUMN_NAME);    
-                int contractId = reader.GetOrdinal(Constants.SQL_CONTRACT_ID_COLUMN_NAME);
-                int bvId = reader.GetOrdinal(Constants.SQL_BV_ID_COLUMN_NAME);
-                
-                while (reader.Read())
+                ListPersons.Clear();
+                var table = _databaseService.ExecuteQuery(Constants.SQL_GET_WORKER_QUERY, tl.Id, Constants.ACTIVE_ROWS);
+                foreach (DataRow row in table.Rows)
                 {
-                    Person person = new Person();
-                    person.P_Id = reader.GetInt32(id);
-                    person.P_Name = reader.GetString(name);
-                    person.P_Language = reader.GetString(lang);
-                    person.P_Role = reader.GetString(role);
-                    person.P_Contract = reader.GetString(contractId);
-                    person.P_TeamLeaderID = teamLeaderId;
-                    person.P_BVID = reader.GetInt32(bvId);
-                    person.P_PathToContentCells = GetAttentionPoint(person);
+                    Person person = new Person
+                    {
+                        Id = Convert.ToInt32(row[Constants.SQL_ID_COLUMN_NAME]),
+                        Name = Convert.ToString(row[Constants.SQL_NAME_COLUMN_NAME]),
+                        Language = Convert.ToString(row[Constants.SQL_LANGUAGE_COLUMN_NAME]),
+                        Role = Convert.ToString(row[Constants.SQL_ROLE_COLUMN_NAME]),
+                        Contract = Convert.ToString(row[Constants.SQL_CONTRACT_ID_COLUMN_NAME]),
+                        TeamLeaderId = tl.Id,
+                        BvId = Convert.ToInt32(row[Constants.SQL_BV_ID_COLUMN_NAME])
+                    };
+                    person.PathToContentCells = GetAttentionPoint(person);
                     ListPersons.Add(person);
                 }
-         
+                ShowAll();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading workers: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         
         private string GetAttentionPoint(Person person)
         {
-
-            var reader = _databaseService.GetCommand($"SELECT * FROM Contentcell WHERE Worker_Role = '{person.P_Role}' AND Worker_Language = '{person.P_Language}'");
-            int pathToContent = reader.GetOrdinal("Path");
-            if (reader.HasRows)
+            try
             {
-                while (reader.Read())
+                string query = "SELECT [Path] FROM Contentcell WHERE Worker_Role = ? AND Worker_Language = ?";
+                var table = _databaseService.ExecuteQuery(query, person.Role, person.Language);
+                if (table.Rows.Count > 0)
                 {
-                    return reader.GetString(pathToContent);
+                    return Convert.ToString(table.Rows[0]["Path"]);
                 }
             }
-            return "";                   
+            catch
+            {
+                // Fallback
+            }
+            return string.Empty;                   
         }
         #endregion
     }

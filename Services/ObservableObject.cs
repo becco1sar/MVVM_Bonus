@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace MVVM_Bonus.Services
 {
@@ -6,7 +7,7 @@ namespace MVVM_Bonus.Services
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public void OnPropertyChanged(string propName)
+        public void OnPropertyChanged([CallerMemberName] string propName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
         }
