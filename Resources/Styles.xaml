@@ -1,4 +1,4 @@
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
@@ -463,6 +463,772 @@
                             <DropShadowEffect Color="#000000" Opacity="0.5" BlurRadius="8" ShadowDepth="3"/>
                         </Border.Effect>
                     </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ==========================================
+         ICON GEOMETRY
+         Line icons on a 24x24 grid, drawn with a stroke rather than a fill so one
+         geometry works at any size and inherits its colour from the control.
+         These replace the emoji the views used as icons: emoji render in whatever
+         colour and shape the font decides, ignore the theme, and are read aloud
+         literally by screen readers.
+         ========================================== -->
+    <StreamGeometry x:Key="IconSearch">M 10 3 A 7 7 0 1 0 10 17 A 7 7 0 1 0 10 3 M 15.2 15.2 L 21 21</StreamGeometry>
+    <StreamGeometry x:Key="IconArrowLeft">M 19 12 L 5 12 M 11 6 L 5 12 L 11 18</StreamGeometry>
+    <StreamGeometry x:Key="IconChevronRight">M 9 6 L 15 12 L 9 18</StreamGeometry>
+    <StreamGeometry x:Key="IconChart">M 3 20 L 21 20 M 6.5 20 L 6.5 13 M 12 20 L 12 7 M 17.5 20 L 17.5 16</StreamGeometry>
+    <StreamGeometry x:Key="IconPlus">M 12 5 L 12 19 M 5 12 L 19 12</StreamGeometry>
+    <StreamGeometry x:Key="IconCheck">M 5 13 L 10 18 L 19 6</StreamGeometry>
+    <StreamGeometry x:Key="IconClose">M 6.5 6.5 L 17.5 17.5 M 17.5 6.5 L 6.5 17.5</StreamGeometry>
+    <StreamGeometry x:Key="IconRefresh">M 4 12 A 8 8 0 1 0 12 20 M 4 12 L 4 6.5 M 4 12 L 9.5 12</StreamGeometry>
+    <StreamGeometry x:Key="IconReset">M 20 12 A 8 8 0 1 1 12 4 M 20 12 L 20 6.5 M 20 12 L 14.5 12</StreamGeometry>
+    <StreamGeometry x:Key="IconPrint">M 7 8 L 7 3 L 17 3 L 17 8 M 7 17 L 4 17 L 4 9 L 20 9 L 20 17 L 17 17 M 7 14 L 17 14 L 17 21 L 7 21 Z</StreamGeometry>
+    <StreamGeometry x:Key="IconDocument">M 6 3 L 14 3 L 19 8 L 19 21 L 6 21 Z M 14 3 L 14 8 L 19 8</StreamGeometry>
+    <StreamGeometry x:Key="IconSave">M 5 3 L 16 3 L 21 8 L 21 21 L 5 21 Z M 8 3 L 8 9 L 16 9 M 8 21 L 8 15 L 18 15 L 18 21</StreamGeometry>
+    <StreamGeometry x:Key="IconDownload">M 12 3 L 12 15 M 7 10 L 12 15 L 17 10 M 4 20 L 20 20</StreamGeometry>
+    <StreamGeometry x:Key="IconUser">M 12 12 A 4 4 0 1 0 12 4 A 4 4 0 1 0 12 12 M 4 21 L 4 19.5 A 5 5 0 0 1 9 14.5 L 15 14.5 A 5 5 0 0 1 20 19.5 L 20 21</StreamGeometry>
+    <StreamGeometry x:Key="IconUsers">M 9 11 A 3.7 3.7 0 1 0 9 3.6 A 3.7 3.7 0 1 0 9 11 M 2 21 L 2 19.5 A 4.6 4.6 0 0 1 6.6 14.9 L 11.4 14.9 A 4.6 4.6 0 0 1 16 19.5 L 16 21 M 16.5 4 A 3.7 3.7 0 0 1 16.5 10.6 M 22 21 L 22 19.5 A 4.6 4.6 0 0 0 18.4 15</StreamGeometry>
+    <StreamGeometry x:Key="IconSettings">M 12 15 A 3 3 0 1 0 12 9 A 3 3 0 1 0 12 15 M 12 2 L 12 5 M 12 19 L 12 22 M 2 12 L 5 12 M 19 12 L 22 12 M 4.9 4.9 L 7 7 M 17 17 L 19.1 19.1 M 4.9 19.1 L 7 17 M 17 7 L 19.1 4.9</StreamGeometry>
+    <StreamGeometry x:Key="IconLogout">M 9 4 L 5 4 L 5 20 L 9 20 M 14 8 L 18 12 L 14 16 M 18 12 L 8.5 12</StreamGeometry>
+    <StreamGeometry x:Key="IconAlert">M 12 3.5 L 21.5 20 L 2.5 20 Z M 12 9 L 12 14 M 12 16.6 L 12 17.4</StreamGeometry>
+    <StreamGeometry x:Key="IconInfo">M 12 21 A 9 9 0 1 0 12 3 A 9 9 0 1 0 12 21 M 12 7.6 L 12 8.4 M 12 11 L 12 16.5</StreamGeometry>
+    <StreamGeometry x:Key="IconLock">M 7 10 L 7 7.5 A 5 5 0 0 1 17 7.5 L 17 10 M 5 10 L 19 10 L 19 20 L 5 20 Z</StreamGeometry>
+    <StreamGeometry x:Key="IconCalendar">M 4 7 L 20 7 L 20 20 L 4 20 Z M 8 4 L 8 9 M 16 4 L 16 9 M 4 12 L 20 12</StreamGeometry>
+    <StreamGeometry x:Key="IconInbox">M 3 13 L 8 13 L 10 16 L 14 16 L 16 13 L 21 13 M 3 13 L 6 5 L 18 5 L 21 13 L 21 20 L 3 20 Z</StreamGeometry>
+
+    <!-- Base icon. Stroke follows the owning control's Foreground, so an icon never
+         needs recolouring when it moves between a filled and an outlined button. -->
+    <Style x:Key="IconPath" TargetType="Path">
+        <Setter Property="Width" Value="17"/>
+        <Setter Property="Height" Value="17"/>
+        <Setter Property="Stretch" Value="Uniform"/>
+        <Setter Property="StrokeThickness" Value="1.7"/>
+        <Setter Property="StrokeLineJoin" Value="Round"/>
+        <Setter Property="StrokeStartLineCap" Value="Round"/>
+        <Setter Property="StrokeEndLineCap" Value="Round"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <!-- Deliberately a fixed token rather than an inherited Foreground: an
+             ancestor lookup finds the host UserControl outside a button and picks up
+             its default black, which is invisible on this theme. Controls that need
+             the icon to follow their text colour set Stroke themselves. -->
+        <Setter Property="Stroke" Value="{StaticResource TextSecondary}"/>
+    </Style>
+
+    <Style x:Key="IconPathSmall" TargetType="Path" BasedOn="{StaticResource IconPath}">
+        <Setter Property="Width" Value="14"/>
+        <Setter Property="Height" Value="14"/>
+        <Setter Property="StrokeThickness" Value="1.9"/>
+    </Style>
+
+    <Style x:Key="IconPathLarge" TargetType="Path" BasedOn="{StaticResource IconPath}">
+        <Setter Property="Width" Value="30"/>
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="StrokeThickness" Value="1.4"/>
+    </Style>
+
+
+    <!-- ==========================================
+         TYPE SCALE
+         Five sizes, one purpose each. The views previously used eleven arbitrary
+         font sizes between 10 and 32, which is why no two headers matched.
+         ========================================== -->
+    <Style x:Key="TextPageTitle" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+        <Setter Property="FontFamily" Value="Segoe UI"/>
+        <Setter Property="FontSize" Value="19"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+    </Style>
+
+    <Style x:Key="TextSectionTitle" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+        <Setter Property="FontFamily" Value="Segoe UI"/>
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+    </Style>
+
+    <!-- Small caps section marker. Letter-spacing comes from the font, not from
+         manually spacing out characters as "S E L E C T E D" did: screen readers
+         spell those out one letter at a time. -->
+    <Style x:Key="TextOverline" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource BrandAccent}"/>
+        <Setter Property="FontFamily" Value="Segoe UI"/>
+        <Setter Property="FontSize" Value="11"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Typography.Capitals" Value="AllSmallCaps"/>
+    </Style>
+
+    <Style x:Key="TextBody" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource TextSecondary}"/>
+        <Setter Property="FontFamily" Value="Segoe UI"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+        <Setter Property="LineHeight" Value="19"/>
+    </Style>
+
+    <Style x:Key="TextBodyStrong" TargetType="TextBlock" BasedOn="{StaticResource TextBody}">
+        <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+    </Style>
+
+    <Style x:Key="TextCaption" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
+        <Setter Property="FontFamily" Value="Segoe UI"/>
+        <Setter Property="FontSize" Value="11"/>
+    </Style>
+
+    <!-- Field label sitting above an input. -->
+    <Style x:Key="TextFieldLabel" TargetType="TextBlock" BasedOn="{StaticResource TextCaption}">
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Margin" Value="0,0,0,6"/>
+    </Style>
+
+    <!-- Money and counts. Tabular figures keep decimal points aligned down a column. -->
+    <Style x:Key="TextMetric" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+        <Setter Property="FontFamily" Value="Segoe UI"/>
+        <Setter Property="FontSize" Value="30"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Typography.NumeralAlignment" Value="Tabular"/>
+    </Style>
+
+    <Style x:Key="TextAmount" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+        <Setter Property="FontFamily" Value="Segoe UI"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Typography.NumeralAlignment" Value="Tabular"/>
+        <Setter Property="TextAlignment" Value="Right"/>
+    </Style>
+
+
+    <!-- ==========================================
+         BUTTONS
+         Four roles, so the eye can tell the main action from the way out.
+         Every button previously used one style (TransformedButtonBorder) with an
+         ad-hoc gradient pasted inline, which made Print, Back, Save and Log Out
+         all look equally important.
+         ========================================== -->
+    <LinearGradientBrush x:Key="AccentGradient" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="{StaticResource BrandAccentColor}" Offset="0.0"/>
+        <GradientStop Color="{StaticResource BrandAccentHoverColor}" Offset="1.0"/>
+    </LinearGradientBrush>
+
+    <SolidColorBrush x:Key="OverlayWhite" Color="#FFFFFF"/>
+
+    <!-- Shared button chrome. `Tag` carries an optional icon geometry, so a view
+         writes Tag="{StaticResource IconSave}" Content="Save" and gets both. -->
+    <ControlTemplate x:Key="AppButtonTemplate" TargetType="Button">
+        <Border x:Name="Root"
+                Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                CornerRadius="9"
+                SnapsToDevicePixels="True">
+            <Grid>
+                <!-- One translucent overlay drives hover and press for every variant,
+                     including the transparent ones where an opacity shift is invisible. -->
+                <Border x:Name="Overlay" CornerRadius="8" Background="{StaticResource OverlayWhite}" Opacity="0"/>
+
+                <!-- Keyboard focus has to be visible: this app is used with a keyboard
+                     far more than its mouse-only styling suggested. -->
+                <Border x:Name="FocusRing" CornerRadius="8" BorderThickness="2"
+                        BorderBrush="{StaticResource BrandAccent}" Opacity="0"/>
+
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Margin="{TemplateBinding Padding}">
+                    <Path Data="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}"
+                          Stroke="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}}"
+                          Margin="0,0,8,0">
+                        <Path.Style>
+                            <Style TargetType="Path" BasedOn="{StaticResource IconPath}">
+                                <Style.Triggers>
+                                    <!-- No icon set: collapse it so the label is not
+                                         pushed off-centre by an empty 17px slot. -->
+                                    <DataTrigger Binding="{Binding Tag, RelativeSource={RelativeSource AncestorType=Button}}" Value="{x:Null}">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Path.Style>
+                    </Path>
+                    <ContentPresenter VerticalAlignment="Center" RecognizesAccessKey="True"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="Overlay" Property="Opacity" Value="0.10"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter TargetName="Overlay" Property="Opacity" Value="0.20"/>
+            </Trigger>
+            <Trigger Property="IsKeyboardFocused" Value="True">
+                <Setter TargetName="FocusRing" Property="Opacity" Value="1"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="Root" Property="Opacity" Value="0.38"/>
+                <Setter Property="Cursor" Value="Arrow"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <Style x:Key="AppButtonBase" TargetType="Button">
+        <Setter Property="FontFamily" Value="Segoe UI"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="MinHeight" Value="38"/>
+        <Setter Property="Padding" Value="16,0"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="Template" Value="{StaticResource AppButtonTemplate}"/>
+    </Style>
+
+    <!-- One per screen: the action the user came to perform. -->
+    <Style x:Key="PrimaryButton" TargetType="Button" BasedOn="{StaticResource AppButtonBase}">
+        <Setter Property="Background" Value="{StaticResource AccentGradient}"/>
+        <Setter Property="Foreground" Value="#0B2B28"/>
+    </Style>
+
+    <!-- Supporting actions: refresh, print, add-as-new. -->
+    <Style x:Key="SecondaryButton" TargetType="Button" BasedOn="{StaticResource AppButtonBase}">
+        <Setter Property="Background" Value="{StaticResource BgCard}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderSubtle}"/>
+        <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+    </Style>
+
+    <!-- Navigation and dismissal: back, close, sign out. Recedes until hovered. -->
+    <Style x:Key="GhostButton" TargetType="Button" BasedOn="{StaticResource AppButtonBase}">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource TextSecondary}"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+    </Style>
+
+    <!-- Discards work: reset. -->
+    <Style x:Key="DangerButton" TargetType="Button" BasedOn="{StaticResource AppButtonBase}">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="#5A2A2E"/>
+        <Setter Property="Foreground" Value="#FF8A80"/>
+    </Style>
+
+    <!-- Square icon-only button, for the ✕ on a panel header. -->
+    <Style x:Key="IconOnlyButton" TargetType="Button" BasedOn="{StaticResource GhostButton}">
+        <Setter Property="Width" Value="32"/>
+        <Setter Property="Height" Value="32"/>
+        <Setter Property="MinHeight" Value="32"/>
+        <Setter Property="Padding" Value="0"/>
+    </Style>
+
+
+    <!-- ==========================================
+         SURFACES
+         ========================================== -->
+    <!-- Page background. -->
+    <Style x:Key="PageRoot" TargetType="Grid">
+        <Setter Property="Background" Value="{StaticResource BgDarkest}"/>
+    </Style>
+
+    <!-- The bar across the top of every screen. Identical everywhere so the title,
+         the way back and the sign-out control never move between pages. -->
+    <Style x:Key="AppBar" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource BgSidebar}"/>
+        <Setter Property="Padding" Value="20,12"/>
+        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderSubtle}"/>
+    </Style>
+
+    <Style x:Key="AppFooter" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource BgSidebar}"/>
+        <Setter Property="Padding" Value="20,12"/>
+        <Setter Property="BorderThickness" Value="0,1,0,0"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderSubtle}"/>
+    </Style>
+
+    <!-- Flat panel: no drop shadow. Stacking shadowed cards inside shadowed cards
+         made the old screens read as unrelated floating slabs. -->
+    <Style x:Key="Panel" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource BgCard}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderSubtle}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="12"/>
+    </Style>
+
+    <Style x:Key="PanelHeader" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource BgSidebar}"/>
+        <Setter Property="CornerRadius" Value="11,11,0,0"/>
+        <Setter Property="Padding" Value="18,13"/>
+        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderSubtle}"/>
+    </Style>
+
+    <!-- A labelled read-only value inside a panel. -->
+    <Style x:Key="FieldTile" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource BgSidebar}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderSubtle}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="Padding" Value="12,10"/>
+        <Setter Property="Margin" Value="0,0,0,8"/>
+    </Style>
+
+    <!-- Row in a selectable list. -->
+    <Style x:Key="RowCard" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource BgSidebar}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderSubtle}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="9"/>
+        <Setter Property="Padding" Value="14,12"/>
+        <Setter Property="Margin" Value="0,0,0,8"/>
+    </Style>
+
+
+    <!-- ==========================================
+         STATUS BANNER
+         Replaces the empty catch blocks and the MessageBox calls that reported
+         routine outcomes as if they were system faults.
+         ========================================== -->
+    <SolidColorBrush x:Key="SuccessSoft" Color="#16332C"/>
+    <SolidColorBrush x:Key="ErrorSoft" Color="#3A2129"/>
+    <SolidColorBrush x:Key="WarningSoft" Color="#3A2E1A"/>
+    <SolidColorBrush x:Key="ErrorText" Color="#FF8A80"/>
+
+    <Style x:Key="StatusBanner" TargetType="Border">
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="Padding" Value="13,10"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Background" Value="{StaticResource SuccessSoft}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BrandAccent}"/>
+    </Style>
+
+
+    <!-- ==========================================
+         BADGE
+         ========================================== -->
+    <Style x:Key="Badge" TargetType="Border">
+        <Setter Property="CornerRadius" Value="6"/>
+        <Setter Property="Padding" Value="10,5"/>
+        <Setter Property="Background" Value="{StaticResource BgSidebar}"/>
+    </Style>
+
+    <Style x:Key="BadgeText" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+        <Setter Property="FontFamily" Value="Segoe UI"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+    </Style>
+
+
+    <!-- ==========================================
+         SEARCH FIELD
+         ========================================== -->
+    <Style x:Key="SearchBox" TargetType="TextBox">
+        <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+        <Setter Property="CaretBrush" Value="{StaticResource BrandAccent}"/>
+        <Setter Property="SelectionBrush" Value="{StaticResource BrandPrimaryHover}"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="Background" Value="{StaticResource BgCard}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderSubtle}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TextBox">
+                    <Border x:Name="Bd"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="9"
+                            Padding="11,7">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Path Grid.Column="0" Data="{StaticResource IconSearch}"
+                                  Style="{StaticResource IconPathSmall}"
+                                  Stroke="{StaticResource TextMuted}"
+                                  Margin="0,0,9,0"/>
+                            <Grid Grid.Column="1">
+                                <!-- Placeholder, shown only while the box is empty. The old
+                                     search fields had no label or hint at all. -->
+                                <TextBlock x:Name="Placeholder"
+                                           Text="{TemplateBinding Tag}"
+                                           Foreground="{StaticResource TextMuted}"
+                                           FontSize="13"
+                                           VerticalAlignment="Center"
+                                           IsHitTestVisible="False"
+                                           Visibility="Collapsed"/>
+                                <ScrollViewer x:Name="PART_ContentHost"
+                                              Focusable="False"
+                                              HorizontalScrollBarVisibility="Hidden"
+                                              VerticalScrollBarVisibility="Hidden"/>
+                            </Grid>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="Text" Value=""/>
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Placeholder" Property="Visibility" Value="Visible"/>
+                        </MultiTrigger>
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource BrandAccent}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <!-- ==========================================
+         FORM TEXTBOX (implicit)
+         Applies to every unstyled TextBox. Several forms used raw TextBoxes with
+         BorderThickness="0", which left no visible focus indication at all.
+         ========================================== -->
+    <Style TargetType="TextBox">
+        <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+        <Setter Property="Background" Value="{StaticResource BgSidebar}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderSubtle}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CaretBrush" Value="{StaticResource BrandAccent}"/>
+        <Setter Property="SelectionBrush" Value="{StaticResource BrandPrimaryHover}"/>
+        <Setter Property="FontFamily" Value="Segoe UI"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="Padding" Value="10,8"/>
+        <Setter Property="MinHeight" Value="34"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TextBox">
+                    <Border x:Name="Bd"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="7"
+                            Padding="{TemplateBinding Padding}">
+                        <ScrollViewer x:Name="PART_ContentHost"
+                                      Focusable="False"
+                                      VerticalScrollBarVisibility="Hidden"
+                                      HorizontalScrollBarVisibility="Hidden"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource BrandPrimaryHover}"/>
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource BrandAccent}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.45"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Amount entry: right-aligned with aligned figures. -->
+    <Style x:Key="AmountTextBox" TargetType="TextBox">
+        <Setter Property="TextAlignment" Value="Right"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Typography.NumeralAlignment" Value="Tabular"/>
+    </Style>
+
+
+    <!-- ==========================================
+         COMBOBOX (implicit)
+         The HR dashboard's period picker was an unstyled ComboBox: a light-grey
+         Windows control sitting on a dark purple card, with black text on
+         selection. This is the one control that visibly broke the theme.
+         ========================================== -->
+    <Style x:Key="ComboToggle" TargetType="ToggleButton">
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="ClickMode" Value="Press"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Border x:Name="Bd"
+                            Background="{StaticResource BgSidebar}"
+                            BorderBrush="{StaticResource BorderSubtle}"
+                            BorderThickness="1"
+                            CornerRadius="7"/>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource BrandPrimaryHover}"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource BrandAccent}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="ComboBox">
+        <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+        <Setter Property="Background" Value="{StaticResource BgSidebar}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderSubtle}"/>
+        <Setter Property="FontFamily" Value="Segoe UI"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="MinHeight" Value="40"/>
+        <Setter Property="Padding" Value="12,0"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBox">
+                    <Grid>
+                        <ToggleButton x:Name="ToggleButton"
+                                      Style="{StaticResource ComboToggle}"
+                                      IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"/>
+
+                        <ContentPresenter x:Name="ContentSite"
+                                          Content="{TemplateBinding SelectionBoxItem}"
+                                          ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                          Margin="{TemplateBinding Padding}"
+                                          HorizontalAlignment="Left"
+                                          VerticalAlignment="Center"
+                                          IsHitTestVisible="False"/>
+
+                        <Path x:Name="Arrow"
+                              Data="M 1 1 L 6 6 L 11 1"
+                              Stroke="{StaticResource TextMuted}"
+                              StrokeThickness="1.8"
+                              StrokeStartLineCap="Round"
+                              StrokeEndLineCap="Round"
+                              StrokeLineJoin="Round"
+                              Width="12" Height="7"
+                              Stretch="Uniform"
+                              HorizontalAlignment="Right"
+                              VerticalAlignment="Center"
+                              Margin="0,0,13,0"
+                              IsHitTestVisible="False"/>
+
+                        <Popup x:Name="PART_Popup"
+                               Placement="Bottom"
+                               VerticalOffset="4"
+                               IsOpen="{TemplateBinding IsDropDownOpen}"
+                               AllowsTransparency="True"
+                               Focusable="False"
+                               PopupAnimation="Fade">
+                            <Border MinWidth="{TemplateBinding ActualWidth}"
+                                    MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                                    Background="{StaticResource BgCard}"
+                                    BorderBrush="{StaticResource BorderSubtle}"
+                                    BorderThickness="1"
+                                    CornerRadius="8"
+                                    Padding="4">
+                                <Border.Effect>
+                                    <DropShadowEffect Color="#000000" Opacity="0.45" BlurRadius="14" ShadowDepth="4"/>
+                                </Border.Effect>
+                                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                    <ItemsPresenter/>
+                                </ScrollViewer>
+                            </Border>
+                        </Popup>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.45"/>
+                        </Trigger>
+                        <Trigger Property="IsDropDownOpen" Value="True">
+                            <Setter TargetName="Arrow" Property="Stroke" Value="{StaticResource BrandAccent}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="ComboBoxItem">
+        <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+        <Setter Property="FontFamily" Value="Segoe UI"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Padding" Value="11,9"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBoxItem">
+                    <Border x:Name="Bd" Background="Transparent" CornerRadius="6" Padding="{TemplateBinding Padding}">
+                        <ContentPresenter VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="#1AFFFFFF"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource BrandPrimary}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <!-- ==========================================
+         PROGRESSBAR (implicit)
+         ========================================== -->
+    <Style TargetType="ProgressBar">
+        <Setter Property="Height" Value="4"/>
+        <Setter Property="Foreground" Value="{StaticResource BrandAccent}"/>
+        <Setter Property="Background" Value="{StaticResource BorderSubtle}"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ProgressBar">
+                    <Grid x:Name="Root" ClipToBounds="True">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="2"/>
+                        <Border x:Name="PART_Track"/>
+                        <Border x:Name="PART_Indicator"
+                                Background="{TemplateBinding Foreground}"
+                                CornerRadius="2"
+                                HorizontalAlignment="Left"/>
+                        <!-- Indeterminate: a shuttle that reads as "working", not as 0%. -->
+                        <Border x:Name="Shuttle"
+                                Background="{TemplateBinding Foreground}"
+                                CornerRadius="2"
+                                Width="120"
+                                HorizontalAlignment="Left"
+                                Visibility="Collapsed"
+                                RenderTransformOrigin="0,0">
+                            <Border.RenderTransform>
+                                <TranslateTransform x:Name="ShuttleShift" X="0"/>
+                            </Border.RenderTransform>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsIndeterminate" Value="True">
+                            <Setter TargetName="PART_Indicator" Property="Visibility" Value="Collapsed"/>
+                            <Setter TargetName="Shuttle" Property="Visibility" Value="Visible"/>
+                            <Trigger.EnterActions>
+                                <BeginStoryboard Name="ShuttleRun">
+                                    <Storyboard RepeatBehavior="Forever">
+                                        <DoubleAnimation Storyboard.TargetName="ShuttleShift"
+                                                         Storyboard.TargetProperty="X"
+                                                         From="-140" To="1400" Duration="0:0:1.4"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <StopStoryboard BeginStoryboardName="ShuttleRun"/>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <!-- ==========================================
+         LISTVIEW / LISTBOX CHROME (implicit)
+         ========================================== -->
+    <Style TargetType="ListBox">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+    </Style>
+
+    <Style TargetType="ListView">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+    </Style>
+
+    <!-- Non-interactive rows: the HR dashboard's completion list is a read-out,
+         not a picker, so its rows should not offer hover or selection affordances. -->
+    <Style x:Key="StaticListViewItem" TargetType="ListViewItem">
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListViewItem">
+                    <ContentPresenter/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Selectable card row, with the accent bar and chevron the employee list used. -->
+    <Style x:Key="CardListBoxItem" TargetType="ListBoxItem">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Border x:Name="Card"
+                            Background="{StaticResource BgSidebar}"
+                            BorderBrush="{StaticResource BorderSubtle}"
+                            BorderThickness="1"
+                            CornerRadius="9"
+                            Margin="0,0,0,8"
+                            Padding="14,12"
+                            Cursor="Hand">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Border x:Name="AccentBar" Grid.Column="0"
+                                    Width="3" CornerRadius="1.5"
+                                    Background="{StaticResource BrandAccent}"
+                                    Opacity="0"
+                                    Margin="-14,-12,11,-12"/>
+
+                            <ContentPresenter Grid.Column="1" VerticalAlignment="Center"/>
+
+                            <Path x:Name="Chevron" Grid.Column="2"
+                                  Data="{StaticResource IconChevronRight}"
+                                  Style="{StaticResource IconPathSmall}"
+                                  Stroke="{StaticResource TextMuted}"
+                                  Margin="10,0,0,0"/>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Card" Property="BorderBrush" Value="{StaticResource BrandAccent}"/>
+                            <Setter TargetName="Chevron" Property="Stroke" Value="{StaticResource BrandAccent}"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="Card" Property="Background" Value="{StaticResource BrandPrimaryDark}"/>
+                            <Setter TargetName="Card" Property="BorderBrush" Value="{StaticResource BrandAccent}"/>
+                            <Setter TargetName="AccentBar" Property="Opacity" Value="1"/>
+                            <Setter TargetName="Chevron" Property="Stroke" Value="{StaticResource BrandAccent}"/>
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter TargetName="Card" Property="BorderBrush" Value="{StaticResource BrandAccentHover}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

@@ -3,310 +3,301 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" 
+             xmlns:util="clr-namespace:MVVM_Bonus.Utilities"
+             mc:Ignorable="d"
              d:DesignHeight="700" d:DesignWidth="1200">
 
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
-
-        <!-- Fade-in Animation for Profile Card -->
-        <Storyboard x:Key="FadeInStoryboard">
-            <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.5"/>
-            <ThicknessAnimation Storyboard.TargetProperty="Margin" From="0,20,0,0" To="0,0,0,0" Duration="0:0:0.5">
-                <ThicknessAnimation.EasingFunction>
-                    <QuadraticEase EasingMode="EaseOut"/>
-                </ThicknessAnimation.EasingFunction>
-            </ThicknessAnimation>
-        </Storyboard>
-
-        <Style x:Key="InfoBoxStyle" TargetType="Border">
-            <Setter Property="Background" Value="#221738"/>
-            <Setter Property="BorderBrush" Value="#3D2B5C"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="CornerRadius" Value="8"/>
-            <Setter Property="Padding" Value="12"/>
-            <Setter Property="Margin" Value="0,0,0,12"/>
-        </Style>
-
-        <!-- Outlined Button Style -->
-        <Style x:Key="OutlinedButtonStyle" TargetType="Button">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="#00B8A9"/>
-            <Setter Property="BorderBrush" Value="#00B8A9"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Padding" Value="10,12"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Margin" Value="0,0,0,10"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="8">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#00B8A9"/>
-                    <Setter Property="Foreground" Value="White"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
-        <!-- Filled Gradient Button Style -->
-        <Style x:Key="FilledButtonStyle" TargetType="Button">
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="Padding" Value="10,12"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border CornerRadius="8">
-                            <Border.Background>
-                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                    <GradientStop Color="#00B8A9" Offset="0"/>
-                                    <GradientStop Color="#00D4AA" Offset="1"/>
-                                </LinearGradientBrush>
-                            </Border.Background>
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Opacity" Value="0.9"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
-        <!-- ListBoxItem Style -->
-        <Style x:Key="WorkerListItemStyle" TargetType="ListBoxItem">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Padding" Value="0"/>
-            <Setter Property="Margin" Value="0"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ListBoxItem">
-                        <Border x:Name="ItemBorder" Background="#2A1D42" BorderBrush="#3D2B5C" BorderThickness="1" CornerRadius="10" Margin="0,0,0,10" Padding="15" Cursor="Hand">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                
-                                <!-- Accent Bar -->
-                                <Border x:Name="AccentBar" Grid.Column="0" Width="3" Background="Transparent" CornerRadius="1.5" Margin="-15,-15,12,-15"/>
-
-                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                    <ContentPresenter/>
-                                </StackPanel>
-                                
-                                <TextBlock Grid.Column="2" Text="→" Foreground="#00B8A9" FontSize="18" FontWeight="Bold" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                            </Grid>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="ItemBorder" Property="BorderBrush" Value="#00B8A9"/>
-                                <Setter TargetName="ItemBorder" Property="Effect">
-                                    <Setter.Value>
-                                        <DropShadowEffect Color="#00B8A9" BlurRadius="10" ShadowDepth="0" Opacity="0.3"/>
-                                    </Setter.Value>
-                                </Setter>
-                            </Trigger>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter TargetName="AccentBar" Property="Background" Value="#00B8A9"/>
-                                <Setter TargetName="ItemBorder" Property="Background" Value="#2D2146"/>
-                                <Setter TargetName="ItemBorder" Property="BorderBrush" Value="#00B8A9"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+        <util:NullToVisibilityConverter x:Key="NullToVis"/>
     </UserControl.Resources>
 
-    <Grid Background="#1A1225">
+    <Grid Style="{StaticResource PageRoot}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- Top Header Bar -->
-        <Border Grid.Row="0" Background="#221738" Padding="24,16">
+        <!-- ============ App bar ============ -->
+        <Border Grid.Row="0" Style="{StaticResource AppBar}">
             <DockPanel LastChildFill="False">
-                <!-- Title -->
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Left" VerticalAlignment="Center">
-                    <Ellipse Width="10" Height="10" Fill="#00B8A9" Margin="0,0,12,0"/>
-                    <TextBlock Text="BMO Quality Bonus" Foreground="#FFFFFF" FontSize="20" FontWeight="Bold"/>
+                    <Ellipse Width="9" Height="9" Fill="{StaticResource BrandAccent}" Margin="0,0,11,0"/>
+                    <TextBlock Style="{StaticResource TextPageTitle}" Text="My team"/>
                 </StackPanel>
 
-                <!-- Sign out. Docked first so it sits furthest right. -->
-                <Button DockPanel.Dock="Right" Content="Sign out"
-                        Style="{StaticResource TransformedButtonBorder}"
+                <!-- Docked right-to-left in the order written. -->
+                <Button DockPanel.Dock="Right"
+                        Content="Sign out"
+                        Tag="{StaticResource IconLogout}"
+                        Style="{StaticResource GhostButton}"
                         Command="{Binding SignOutCommand}"
-                        Padding="14,8" FontSize="12" Margin="16,0,0,0"
-                        VerticalAlignment="Center">
-                    <Button.Background>
-                        <SolidColorBrush Color="#2A1D42"/>
-                    </Button.Background>
-                </Button>
+                        VerticalAlignment="Center"
+                        Margin="14,0,0,0"
+                        ToolTip="End your session on this computer"/>
 
-                <!-- Who is signed in: these machines are shared between team leaders. -->
-                <StackPanel DockPanel.Dock="Right" VerticalAlignment="Center" Margin="16,0,0,0">
-                    <TextBlock Text="Signed in as" Foreground="#8B7AAF" FontSize="10"/>
-                    <TextBlock Text="{Binding TeamLeaderName}" Foreground="#FFFFFF" FontSize="13" FontWeight="SemiBold"/>
+                <!-- These machines are shared, so who is signed in must be visible. -->
+                <StackPanel DockPanel.Dock="Right" VerticalAlignment="Center" Margin="18,0,0,0">
+                    <TextBlock Style="{StaticResource TextCaption}" Text="Signed in as"/>
+                    <TextBlock Style="{StaticResource TextBodyStrong}"
+                               Text="{Binding TeamLeaderName}"
+                               Margin="0,1,0,0"/>
                 </StackPanel>
 
-                <!-- Search Bar -->
-                <Border DockPanel.Dock="Right" Background="#2A1D42" BorderBrush="#3D2B5C" BorderThickness="1" CornerRadius="10" Padding="12,8" Width="280">
-                    <DockPanel LastChildFill="True">
-                        <TextBlock Text="🔍" Foreground="#8B7AAF" DockPanel.Dock="Left" FontSize="16" Margin="0,0,10,0" VerticalAlignment="Center"/>
-                        <TextBox Background="Transparent" BorderThickness="0" Foreground="#FFFFFF" FontSize="14" VerticalContentAlignment="Center"
-                                 Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}"/>
-                    </DockPanel>
-                </Border>
+                <TextBox DockPanel.Dock="Right"
+                         Style="{StaticResource SearchBox}"
+                         Tag="Search your team"
+                         Width="260"
+                         VerticalAlignment="Center"
+                         Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}"/>
             </DockPanel>
         </Border>
 
-        <!-- Main Content -->
-        <Grid Grid.Row="1" Margin="24">
+        <!-- ============ Content ============ -->
+        <Grid Grid.Row="1" Margin="20,18,20,18">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="350"/>
-                <ColumnDefinition Width="24"/>
-                <ColumnDefinition Width="*"/>
+                <!-- The list is what the user acts on, so it leads; the detail panel
+                     follows on the right. The old screen put the detail first, which
+                     meant reading a result before choosing its input. -->
+                <ColumnDefinition Width="2*" MinWidth="360"/>
+                <ColumnDefinition Width="18"/>
+                <ColumnDefinition Width="3*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- LEFT COLUMN: Selected Employee Profile Card -->
-            <Border Grid.Column="0" Background="#2A1D42" CornerRadius="14" Padding="24">
-                <Border.Effect>
-                    <DropShadowEffect Color="Black" BlurRadius="20" ShadowDepth="5" Opacity="0.3"/>
-                </Border.Effect>
-                <Border.Triggers>
-                    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-                        <BeginStoryboard Storyboard="{StaticResource FadeInStoryboard}"/>
-                    </EventTrigger>
-                </Border.Triggers>
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <StackPanel>
-                        <!-- Label -->
-                        <TextBlock Text="S E L E C T E D   E M P L O Y E E" Foreground="#00B8A9" FontSize="11" FontWeight="Bold" Margin="0,0,0,20"/>
+            <!-- Employee list -->
+            <Border Grid.Column="0" Style="{StaticResource Panel}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
 
-                        <!-- Nothing selected: four empty fields read as a loading failure,
-                             so say plainly that a choice is needed. -->
-                        <TextBlock Text="Pick someone from the list to see their details and record a bonus."
-                                   Foreground="#8B7AAF" FontSize="13" TextWrapping="Wrap" LineHeight="20"
-                                   Margin="0,0,0,10">
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock">
-                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding SelectedWorker}" Value="{x:Null}">
-                                            <Setter Property="Visibility" Value="Visible"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
-                        
-                        <!-- Info Rows -->
-                        <Border Style="{StaticResource InfoBoxStyle}">
-                            <StackPanel>
-                                <TextBlock Text="Name" Foreground="#8B7AAF" FontSize="12" Margin="0,0,0,4"/>
-                                <TextBlock Text="{Binding SelectedWorker.Name}" Foreground="#FFFFFF" FontSize="15" FontWeight="Bold" TextTrimming="CharacterEllipsis"/>
-                            </StackPanel>
-                        </Border>
+                    <Border Grid.Row="0" Style="{StaticResource PanelHeader}">
+                        <DockPanel LastChildFill="False">
+                            <TextBlock DockPanel.Dock="Left" Style="{StaticResource TextSectionTitle}" Text="Team members"/>
+                            <Border DockPanel.Dock="Right" Style="{StaticResource Badge}" Padding="8,3">
+                                <TextBlock Style="{StaticResource BadgeText}"
+                                           Foreground="{StaticResource TextSecondary}"
+                                           Text="{Binding FilteredListPerson.Count}"/>
+                            </Border>
+                        </DockPanel>
+                    </Border>
 
-                        <Border Style="{StaticResource InfoBoxStyle}">
-                            <StackPanel>
-                                <TextBlock Text="Function" Foreground="#8B7AAF" FontSize="12" Margin="0,0,0,4"/>
-                                <TextBlock Text="{Binding SelectedWorker.Role}" Foreground="#FFFFFF" FontSize="15" FontWeight="Bold" TextTrimming="CharacterEllipsis"/>
-                            </StackPanel>
-                        </Border>
+                    <ListBox Grid.Row="1"
+                             ItemsSource="{Binding FilteredListPerson}"
+                             SelectedItem="{Binding SelectedWorker}"
+                             ItemContainerStyle="{StaticResource CardListBoxItem}"
+                             Padding="14,14,14,4">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Style="{StaticResource TextBodyStrong}"
+                                               Text="{Binding Name}"
+                                               FontSize="14"
+                                               TextTrimming="CharacterEllipsis"/>
+                                    <StackPanel Orientation="Horizontal" Margin="0,3,0,0">
+                                        <TextBlock Style="{StaticResource TextCaption}" Text="{Binding Role}"/>
+                                        <TextBlock Style="{StaticResource TextCaption}"
+                                                   Text=" · "
+                                                   Visibility="{Binding Contract, Converter={StaticResource NullToVis}}"/>
+                                        <TextBlock Style="{StaticResource TextCaption}" Text="{Binding Contract}"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
 
-                        <Border Style="{StaticResource InfoBoxStyle}">
-                            <StackPanel>
-                                <TextBlock Text="Contract Type" Foreground="#8B7AAF" FontSize="12" Margin="0,0,0,4"/>
-                                <TextBlock Text="{Binding SelectedWorker.Contract}" Foreground="#FFFFFF" FontSize="15" FontWeight="Bold" TextTrimming="CharacterEllipsis"/>
-                            </StackPanel>
-                        </Border>
-
-                        <Border Style="{StaticResource InfoBoxStyle}" Margin="0,0,0,24">
-                            <StackPanel>
-                                <TextBlock Text="Last Bonus Date" Foreground="#8B7AAF" FontSize="12" Margin="0,0,0,4"/>
-                                <TextBlock Text="00/00/00" Foreground="#FFFFFF" FontSize="15" FontWeight="Bold"/>
-                            </StackPanel>
-                        </Border>
-
-                        <!-- Action Buttons -->
-                        <Button Content="📊 View History" Style="{StaticResource OutlinedButtonStyle}" Command="{Binding GetPersonsBonus}"/>
-                        <Button Content="➕ New Bonus" Style="{StaticResource FilledButtonStyle}" Command="{Binding InsertPersonsBonus}"/>
+                    <!-- Loading. A blank panel with no explanation reads as a broken screen. -->
+                    <StackPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                Visibility="{Binding IsLoading, Converter={StaticResource BoolToVis}}">
+                        <ProgressBar IsIndeterminate="True" Width="150" Margin="0,0,0,14"/>
+                        <TextBlock Style="{StaticResource TextCaption}" Text="Loading your team…" HorizontalAlignment="Center"/>
                     </StackPanel>
-                </ScrollViewer>
+
+                    <!-- Empty: nobody assigned. -->
+                    <StackPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="34"
+                                Visibility="{Binding HasNoWorkers, Converter={StaticResource BoolToVis}}">
+                        <Path Data="{StaticResource IconUsers}"
+                              Style="{StaticResource IconPathLarge}"
+                              Stroke="{StaticResource TextMuted}"
+                              HorizontalAlignment="Center" Margin="0,0,0,14"/>
+                        <TextBlock Style="{StaticResource TextBodyStrong}" FontSize="15"
+                                   Text="No team members" TextAlignment="Center" Margin="0,0,0,6"/>
+                        <TextBlock Style="{StaticResource TextBody}" MaxWidth="270" TextAlignment="Center"
+                                   Text="Nobody is assigned to you as an active employee. Ask HR to check the staff directory."/>
+                    </StackPanel>
+
+                    <!-- Empty: search matched nothing. A different problem, so different wording. -->
+                    <StackPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="34"
+                                Visibility="{Binding HasNoSearchResults, Converter={StaticResource BoolToVis}}">
+                        <Path Data="{StaticResource IconSearch}"
+                              Style="{StaticResource IconPathLarge}"
+                              Stroke="{StaticResource TextMuted}"
+                              HorizontalAlignment="Center" Margin="0,0,0,14"/>
+                        <TextBlock Style="{StaticResource TextBodyStrong}" FontSize="15"
+                                   Text="No matches" TextAlignment="Center" Margin="0,0,0,6"/>
+                        <TextBlock Style="{StaticResource TextBody}" MaxWidth="270" TextAlignment="Center"
+                                   Text="{Binding Search, StringFormat='Nobody in your team matches “{0}”.'}"/>
+                    </StackPanel>
+                </Grid>
             </Border>
 
-            <!-- RIGHT COLUMN: Employee List -->
-            <Grid Grid.Column="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-
-                <!-- List Header -->
-                <Border Grid.Row="0" Background="#221738" CornerRadius="10,10,0,0" Padding="20,16">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Team Members" Foreground="#FFFFFF" FontSize="16" FontWeight="Bold"/>
-                        <TextBlock Text="{Binding FilteredListPerson.Count, StringFormat=' ({0})'}"
-                                   Foreground="#8B7AAF" FontSize="14" VerticalAlignment="Center" Margin="4,0,0,0"/>
+            <!-- Selected employee -->
+            <Border Grid.Column="2" Style="{StaticResource Panel}">
+                <Grid>
+                    <!-- Nothing selected. Four blank fields read as a failed load, so the
+                         panel says what to do instead of showing empty labels. -->
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="40">
+                        <StackPanel.Style>
+                            <Style TargetType="StackPanel">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding HasSelection}" Value="False">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <Path Data="{StaticResource IconUser}"
+                              Style="{StaticResource IconPathLarge}"
+                              Stroke="{StaticResource TextMuted}"
+                              HorizontalAlignment="Center" Margin="0,0,0,16"/>
+                        <TextBlock Style="{StaticResource TextBodyStrong}" FontSize="15"
+                                   Text="Select an employee" TextAlignment="Center" Margin="0,0,0,6"/>
+                        <TextBlock Style="{StaticResource TextBody}" MaxWidth="300" TextAlignment="Center"
+                                   Text="Pick someone from your team to see their details, review past bonuses, or record a new one."/>
                     </StackPanel>
-                </Border>
 
-                <!-- ListBox -->
-                <ListBox Grid.Row="1" ItemsSource="{Binding FilteredListPerson}" SelectedItem="{Binding SelectedWorker}" 
-                         Background="Transparent" BorderThickness="0" Padding="0,15,0,0" 
-                         ItemContainerStyle="{StaticResource WorkerListItemStyle}"
-                         ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel>
-                                <TextBlock Text="{Binding Name}" Foreground="#FFFFFF" FontSize="14" FontWeight="Bold" Margin="0,0,0,4"/>
-                                <TextBlock Text="{Binding Role}" Foreground="#B8A9D4" FontSize="12"/>
+                    <!-- Details -->
+                    <Grid Visibility="{Binding HasSelection, Converter={StaticResource BoolToVis}}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Identity -->
+                        <Border Grid.Row="0" Style="{StaticResource PanelHeader}">
+                            <StackPanel Orientation="Horizontal">
+                                <Border Width="42" Height="42" CornerRadius="21"
+                                        Background="{StaticResource BrandPrimary}"
+                                        Margin="0,0,14,0">
+                                    <Path Data="{StaticResource IconUser}"
+                                          Style="{StaticResource IconPath}"
+                                          Stroke="{StaticResource TextPrimary}"
+                                          Width="21" Height="21"
+                                          HorizontalAlignment="Center"/>
+                                </Border>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Style="{StaticResource TextPageTitle}"
+                                               Text="{Binding SelectedWorker.Name}" FontSize="17"/>
+                                    <TextBlock Style="{StaticResource TextCaption}"
+                                               Text="{Binding SelectedWorker.Role}" Margin="0,2,0,0"/>
+                                </StackPanel>
                             </StackPanel>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
+                        </Border>
 
-                <!-- Empty states. A blank panel gives the user nothing to act on. -->
-                <StackPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center"
-                            Margin="40" Visibility="{Binding HasNoWorkers, Converter={StaticResource BoolToVis}}">
-                    <TextBlock Text="No team members" Foreground="#FFFFFF" FontSize="16"
-                               FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,0,0,6"/>
-                    <TextBlock Text="Nobody is assigned to you as an active employee. Ask HR to check the staff directory."
-                               Foreground="#8B7AAF" FontSize="13" TextWrapping="Wrap" TextAlignment="Center" MaxWidth="320"/>
-                </StackPanel>
+                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="20,18,20,0">
+                            <StackPanel>
+                                <TextBlock Style="{StaticResource TextOverline}" Text="Employee details" Margin="0,0,0,12"/>
 
-                <StackPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center"
-                            Margin="40" Visibility="{Binding HasNoSearchResults, Converter={StaticResource BoolToVis}}">
-                    <TextBlock Text="No matches" Foreground="#FFFFFF" FontSize="16"
-                               FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,0,0,6"/>
-                    <TextBlock Foreground="#8B7AAF" FontSize="13" TextWrapping="Wrap" TextAlignment="Center" MaxWidth="320"
-                               Text="{Binding Search, StringFormat='Nobody in your team matches &quot;{0}&quot;.'}"/>
-                </StackPanel>
-            </Grid>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="10"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Border Grid.Column="0" Style="{StaticResource FieldTile}">
+                                        <StackPanel>
+                                            <TextBlock Style="{StaticResource TextCaption}" Text="Function"/>
+                                            <TextBlock Style="{StaticResource TextBodyStrong}" FontSize="14"
+                                                       Text="{Binding SelectedWorker.Role}"
+                                                       TextTrimming="CharacterEllipsis" Margin="0,3,0,0"/>
+                                        </StackPanel>
+                                    </Border>
+
+                                    <Border Grid.Column="2" Style="{StaticResource FieldTile}">
+                                        <StackPanel>
+                                            <TextBlock Style="{StaticResource TextCaption}" Text="Contract"/>
+                                            <TextBlock Style="{StaticResource TextBodyStrong}" FontSize="14"
+                                                       Text="{Binding SelectedWorker.Contract}"
+                                                       TextTrimming="CharacterEllipsis" Margin="0,3,0,0"/>
+                                        </StackPanel>
+                                    </Border>
+                                </Grid>
+
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="10"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- Real values, queried per selection. This tile used to
+                                         print a hardcoded "00/00/00". -->
+                                    <Border Grid.Column="0" Style="{StaticResource FieldTile}">
+                                        <StackPanel>
+                                            <TextBlock Style="{StaticResource TextCaption}" Text="Last bonus period"/>
+                                            <TextBlock Style="{StaticResource TextBodyStrong}" FontSize="14"
+                                                       Text="{Binding LastBonusPeriod}" Margin="0,3,0,0"/>
+                                        </StackPanel>
+                                    </Border>
+
+                                    <Border Grid.Column="2" Style="{StaticResource FieldTile}">
+                                        <StackPanel>
+                                            <TextBlock Style="{StaticResource TextCaption}" Text="Bonuses on record"/>
+                                            <TextBlock Style="{StaticResource TextBodyStrong}" FontSize="14"
+                                                       Text="{Binding BonusCount}" Margin="0,3,0,0"/>
+                                        </StackPanel>
+                                    </Border>
+                                </Grid>
+
+                                <TextBlock Style="{StaticResource TextCaption}"
+                                           Text="Looking up bonus history…"
+                                           Margin="2,2,0,0"
+                                           Visibility="{Binding IsSummaryLoading, Converter={StaticResource BoolToVis}}"/>
+                            </StackPanel>
+                        </ScrollViewer>
+
+                        <!-- Actions. One primary; history is supporting. -->
+                        <Border Grid.Row="2" Style="{StaticResource AppFooter}" Background="Transparent" Padding="20,16">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Button Grid.Column="0"
+                                        Content="View history"
+                                        Tag="{StaticResource IconChart}"
+                                        Style="{StaticResource SecondaryButton}"
+                                        Command="{Binding GetPersonsBonus}"
+                                        MinHeight="42"/>
+
+                                <Button Grid.Column="2"
+                                        Content="New bonus"
+                                        Tag="{StaticResource IconPlus}"
+                                        Style="{StaticResource PrimaryButton}"
+                                        Command="{Binding InsertPersonsBonus}"
+                                        MinHeight="42"/>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </Grid>
+            </Border>
         </Grid>
 
-        <!-- Footer -->
-        <Border Grid.Row="2" Background="#221738" Padding="20,12">
-            <TextBlock Text="Bauer Media Outdoor · Quality Bonus v2.0" Foreground="#8B7AAF" FontSize="11"/>
+        <!-- ============ Footer ============ -->
+        <Border Grid.Row="2" Style="{StaticResource AppFooter}">
+            <DockPanel LastChildFill="False">
+                <TextBlock DockPanel.Dock="Left" Style="{StaticResource TextCaption}"
+                           Text="Bauer Media Outdoor · Quality Bonus v2.0"/>
+                <TextBlock DockPanel.Dock="Right" Style="{StaticResource TextCaption}"
+                           Text="{Binding ListPersons.Count, StringFormat='{}{0} active employees'}"/>
+            </DockPanel>
         </Border>
     </Grid>
 </UserControl>
